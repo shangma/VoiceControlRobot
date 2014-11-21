@@ -20,8 +20,7 @@ public class DetectionService extends Service implements RecognitionListener {
 	private static final String TAG = "Detection Service";
 
 	public static final String ACTIVATION_STOP_INTENT_KEY = "ACTIVATION_STOP_INTENT_KEY";
-	public static final String ACTIVATION_RESULT_INTENT_KEY = "ACTIVATION_RESULT_INTENT_KEY";
-	public static final String ACTIVATION_RESULT_BROADCAST_NAME = "info.shangma.voicecontrolrobot.ACTIVATION";
+	
 
 	private static final String TARGETWORDS = "hello";
 
@@ -209,8 +208,8 @@ public class DetectionService extends Service implements RecognitionListener {
 		stop();
 
 		// broadcast result
-		Intent intent = new Intent(ACTIVATION_RESULT_BROADCAST_NAME);
-		intent.putExtra(ACTIVATION_RESULT_INTENT_KEY, success);
+		Intent intent = new Intent(SpeechActivationBroadcastReceiver.ACTIVATION_RESULT_BROADCAST_NAME);
+		intent.putExtra(SpeechActivationBroadcastReceiver.ACTIVATION_RESULT_INTENT_KEY, success);
 		sendBroadcast(intent);
 
 		Log.i(TAG, "found it");

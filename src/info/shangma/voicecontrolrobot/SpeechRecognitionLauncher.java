@@ -15,6 +15,7 @@
  */
 package info.shangma.voicecontrolrobot;
 
+import info.shangma.voicecontrolrobot.comm.KeywordQuery;
 import info.shangma.voicecontrolrobot.command.CancelCommand;
 import info.shangma.voicecontrolrobot.command.DeviceLookup;
 import info.shangma.voicecontrolrobot.data.FtsIndexedFoodDatabase;
@@ -78,13 +79,7 @@ public class SpeechRecognitionLauncher extends
 	private FtsIndexedFoodDatabase foodDb;
 
 	private TextView log;
-	
-	private List<String> keywordList;
-	private float[] confidence;
-	
-	private String conversation;
-	
-	private AlchemyAPI alchemyObj;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,12 +87,9 @@ public class SpeechRecognitionLauncher extends
 		setContentView(R.layout.fooddialogmulti);
  
 		log = (TextView) findViewById(R.id.tv_resultlog);
-		keywordList = new ArrayList<String>();
 		
-//		alchemyObj = AlchemyAPI.GetInstanceFromString("f54e554a09119e3cb6e5c8485118b1a31736e996");
-
 		
-		initDbs();
+//		initDbs();
 		initDialog();
 		Log.i(TAG, "finish initialization");
 	}
@@ -194,7 +186,6 @@ public class SpeechRecognitionLauncher extends
 	public void onDone(String utteranceId) {
 		if (utteranceId.equals(ON_DONE_PROMPT_TTS_PARAM)) {
 			executor.setTts(getTts());
-			System.out.println("1. has prompt or not: " + lookupVoiceAction.hasSpokenPrompt());
 			executor.execute(lookupVoiceAction);
 		}
 	}
@@ -209,126 +200,21 @@ public class SpeechRecognitionLauncher extends
 		Log.d(TAG, "I just received " + heard.size());
 
 		clearLog();
-		confidence = new float[confidenceScores.length];
 		for (int i = 0; i < heard.size(); i++) {
 			appendToLog(heard.get(i) + " " + confidenceScores[i]);
-			confidence[i] = confidenceScores[i];
 		}
-		
-		Log.d(TAG, "the orignal size of keyword list: " + keywordList.size());
 
-		extractKeyword(heard);		
-	}
-	
-	private void extractKeyword(List<String> heard)
-	{
-		if (heard.size() > 0) {
-//			new KeywordFetchTask().execute(heard);
-		}
-	}
-	
-	private static String getStringFromDocument(Document doc) {
+		executor.handleReceiveWhatWasHeard(heard, confidenceScores);
+		
 		try {
-			DOMSource domSource = new DOMSource(doc);
-			StringWriter writer = new StringWriter();
-			StreamResult result = new StreamResult(writer);
-
-			TransformerFactory tf = TransformerFactory.newInstance();
-			Transformer transformer = tf.newTransformer();
-			transformer.transform(domSource, result);
-
-			return writer.toString();
-		} catch (TransformerException ex) {
-			ex.printStackTrace();
-			return null;
-		}
-	}
-	
-	
-	private class KeywordFetchTask extends AsyncTask<List<String>, Void, List<String>> {
-
-		@Override
-		protected List<String> doInBackground(List<String>... passed) {
-			// TODO Auto-generated method stub
-			
-			List<String> heard = passed[0];
-			String heardSentence;
-			
-			for (int j = 0; j < heard.size(); j++) {
-				heardSentence = heard.get(j);
-				
-				try {
-					Document doc = alchemyObj.TextGetRankedKeywords(heardSentence);
-					
-//					System.out.println("--------------------");
-//					Log.d(TAG, getStringFromDocument(doc));
-//					System.out.println("--------------------");
-
-					doc.getDocumentElement().normalize();
-					
-//					Log.d(TAG, doc.getDocumentElement().getNodeName());
-//					Log.d(TAG, Short.toString(doc.getDocumentElement().getNodeType()));
-					NodeList nodeList = doc.getElementsByTagName("results");
-					for (int i = 0; i < nodeList.getLength(); i++) {
-						Node node = nodeList.item(i);
-//						Log.d(TAG, node.getNodeName());
-//						Log.d(TAG, Short.toString(node.getNodeType()));
-
-						if (node.getNodeType() == Node.ELEMENT_NODE) {
-							Element firstElement = (Element) node;
-							NodeList firstList = firstElement.getElementsByTagName("keyword");
-							Node node2 = firstList.item(0);
-							if (node2.getNodeType() == Node.ELEMENT_NODE) {
-								Element secondElement = (Element) node;
-								NodeList keyList = secondElement.getElementsByTagName("text");
-								System.out.println(keyList.item(0).getTextContent());
-								keywordList.add(keyList.item(0).getTextContent());
-							}
-						}			
-						
-					}
-					
-				} catch (XPathExpressionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SAXException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ParserConfigurationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-						
-			return null;
+			Thread.sleep(4000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
-		@Override
-		protected void onPostExecute(List<String> result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-			executor.handleReceiveWhatWasHeard(keywordList, confidence);
+		executor.execute(lookupVoiceAction);
 
-			Log.d(TAG, "the size of keyword list: " + keywordList.size());
-			
-			for (int i = 0; i < keywordList.size(); i++) {
-				Log.d(TAG, "the keyword at " + i + " is " + keywordList.get(i));
-			}
-			
-			try {
-				Thread.sleep(4000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			executor.execute(lookupVoiceAction);
-		}
-		
 	}
 	
 }

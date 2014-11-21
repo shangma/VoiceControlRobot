@@ -8,17 +8,18 @@ import android.util.Log;
 public class SpeechActivationBroadcastReceiver extends BroadcastReceiver {
 	
 	private static final String TAG = "SpeechActivationBroadcastReceiver";
+	public static final String ACTIVATION_RESULT_BROADCAST_NAME = "info.shangma.voicecontrolrobot.ACTIVATION";
+	public static final String ACTIVATION_RESULT_INTENT_KEY = "ACTIVATION_RESULT_INTENT_KEY";
+
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
 		
-		if (intent.getAction().equals(
-				DetectionService.ACTIVATION_RESULT_BROADCAST_NAME))
+		if (intent.getAction().equals(ACTIVATION_RESULT_BROADCAST_NAME))
         {
             if (intent
-                    .getBooleanExtra(
-                    		DetectionService.ACTIVATION_RESULT_INTENT_KEY,
+                    .getBooleanExtra(ACTIVATION_RESULT_INTENT_KEY,
                             false))
             {
                 Log.d(TAG,
