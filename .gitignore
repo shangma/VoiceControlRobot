@@ -48,3 +48,8 @@ Temporary Items
 *.jar
 *.cache
 *.apk
+
+bin
+gen
+proguard-project.txt
+project.properties
