@@ -1,0 +1,137 @@
+light,1
+bolts,1 
+decoration lights,1
+smoker,2
+brush,2
+scrub,2 
+chunk,2
+basket ball,2 
+adapter,2
+hose,2 
+handle light,2 
+thermo,2
+glove,2 
+drip,2
+holder,2
+lighter cube,2
+barbecue sauce,2
+barbecue cleaner,2 
+charcoal,2
+skew,2
+press,2 
+wok,2 
+turner,2
+fork,2
+roaster,2 
+topper,2 
+lighter,2 
+wick,2 
+tablecloth,2
+match,2
+lighter fuel,2
+outlet,3
+ac adapter,3
+remote controller,3 
+organizer,3
+phone case,3
+phone cable,3
+cable,3
+telephone,3
+display clean,3
+adapter,3
+backup power,3
+antenna,3
+surge protector,3
+flashlight,4
+bulbs,4
+lamp starter,4
+vacuum,5
+belt,5
+bag,5
+filter,5
+dust buster,5
+pitcher,6
+container,6
+bottle,6
+organizer,6
+bin,6 
+turn table,6
+junk drawer,6
+paper towel stand,6
+hook,6
+sponge,6
+scrubber,6
+brush,6
+dish drainer,6
+sink strainer,6
+cloth,6
+mat,6
+oil,6
+napkin,6
+sandwich maker,6
+freeze pack,6
+cooler,6
+ice pack,6
+cold pack,6
+food saver,6
+zip lock,6
+wax paper,6
+filter,6
+filter replacement,6
+glass,6
+wine stopper,6
+bottle opener,6
+knife,6
+coaster,6
+cutting board,6
+chopping board,6
+chop stick,6
+slicer,6
+wedge,6
+spoon,6
+clip,6
+timer,6
+squeezer,6
+drying mat,6
+container,6 
+spatula,6
+fine grater,6
+lid,6
+measurer,6
+saver,6
+keeper,6
+micro-go-round,6
+plater,6
+cup,6
+tea pot,6
+measurer,6
+mug,6
+dish,6
+oven liner,6
+colander,6
+pan,6
+skillet,6
+griddle,6
+pot,6
+mixing bowl,6
+rack,6
+cooker,6
+rolling pin ball,6
+frother,6
+cooking twine,6
+peeler,6
+utensil holder,6
+fork,6
+whisk,6
+turner,6
+ladle,6
+tong,6
+opener,6
+spinner,6
+kitchen scale,6
+ice bucket,6
+cutter,6
+thermometer,6
+sealing ring,6
+chopper,6
+scraper,6

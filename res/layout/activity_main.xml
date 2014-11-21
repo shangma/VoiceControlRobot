@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/khaki"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/startServiceBtn"
+        style="@style/ButtonOnMain"
+        android:background="@drawable/btn_green"
+        android:onClick="onStartService"
+        android:text="Start" />
+
+    <Button
+        android:id="@+id/stopServiceBtn"
+        style="@style/ButtonOnMain"
+        android:background="@drawable/btn_red"
+        android:onClick="onStopService"
+        android:text="Stop" />
+    
+    
+        <Button
+        android:id="@+id/testServiceBtn"
+        style="@style/ButtonOnMain"
+        android:background="@drawable/btn_black"
+        android:onClick="onTestService"
+        android:text="Test Service" />
+
+</LinearLayout>
