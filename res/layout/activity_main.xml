@@ -3,20 +3,28 @@
     android:layout_height="match_parent"
     android:background="@color/khaki"
     android:orientation="vertical" >
+    
+    <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textSize="40dp"
+        android:text="Say &quot;Hello&quot; to Start"/>
 
     <Button
         android:id="@+id/startServiceBtn"
         style="@style/ButtonOnMain"
         android:background="@drawable/btn_green"
         android:onClick="onStartService"
-        android:text="Start" />
+        android:text="Force to Start" />
 
     <Button
         android:id="@+id/stopServiceBtn"
         style="@style/ButtonOnMain"
         android:background="@drawable/btn_red"
         android:onClick="onStopService"
-        android:text="Stop" />
+        android:text="Force to Stop" />
     
     
         <Button

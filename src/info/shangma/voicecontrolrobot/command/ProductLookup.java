@@ -15,10 +15,8 @@
  */
 package info.shangma.voicecontrolrobot.command;
 
-import info.shangma.voicecontrolrobot.comm.KeywordQuery;
-import info.shangma.voicecontrolrobot.data.Food;
-import info.shangma.voicecontrolrobot.data.FtsIndexedFoodDatabase;
-import info.shangma.voicecontrolrobot.data.MatchedFood;
+import info.shangma.utils.string.Inflector;
+import info.shangma.voicecontrolrobot.util.AppState;
 import info.shangma.voicecontrolrobot.util.CommonUtil;
 import info.shangma.voicecontrolrobot.R;
 import info.shangma.voicecontrolrobot.SpeechActivationBroadcastReceiver;
@@ -63,34 +61,38 @@ import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class DeviceLookup implements VoiceActionCommand
+public class ProductLookup implements VoiceActionCommand
 {
-    private static final String TAG = "DeviceLookup";
+    private static final String TAG = "Product Lookup";
 
     private VoiceActionExecutor executor;
-    private FtsIndexedFoodDatabase foodFts;
     private Context context;
     
 	private String url = "http://128.195.204.85/robot/response.jsp?query="; 
 	private AlchemyAPI alchemyObj;
 
 	private boolean lookupResult;
-	private String result;
+	private String resultAisleNumber;
+	
+	private String currentProduct;
+	
+
 	
 	AndroidHttpClient client;
 	
 	private AsyncTask<String, Void, Void> mTask;
+	
+	Inflector mInflector;
 
-    public DeviceLookup(Context context, VoiceActionExecutor executor,
-            FtsIndexedFoodDatabase foodFts)
+    public ProductLookup(Context context, VoiceActionExecutor executor)
     {
         this.context = context;
         this.executor = executor;
-        this.foodFts = foodFts;
 		
         alchemyObj = AlchemyAPI.GetInstanceFromString("f54e554a09119e3cb6e5c8485118b1a31736e996");
     	lookupResult = false;
-    	result = null;
+    	resultAisleNumber = null;
+    	mInflector = Inflector.getInstance();
     }
     
     
@@ -137,6 +139,13 @@ public class DeviceLookup implements VoiceActionCommand
 			return null;
 		}
 	}
+	
+	private String getStringRevised(String beforeRevised)
+	{
+		String afterRevised = mInflector.singularize(beforeRevised).replace(' ', '&');
+			
+		return afterRevised;
+	}
 
     private class SimpleHttpGetTask extends AsyncTask<String, Void, Void> {
 		
@@ -147,7 +156,6 @@ public class DeviceLookup implements VoiceActionCommand
 			
 			String heardSentence = passed[0];
 			String currKeyword = null;
-				
 			try {
 				Log.d(TAG, "Send out for keyword: " + heardSentence);
 				Document doc = alchemyObj.TextGetRankedKeywords(heardSentence);
@@ -201,7 +209,8 @@ public class DeviceLookup implements VoiceActionCommand
 			}
 
 			if (currKeyword != null) {
-
+				currKeyword = getStringRevised(currKeyword);
+				currentProduct = currKeyword;
 				String queryUrl = url + currKeyword;
 				Log.d("TAG", "hitting URL:" + queryUrl);
 
@@ -238,17 +247,10 @@ public class DeviceLookup implements VoiceActionCommand
 								instream = new GZIPInputStream(instream);
 							}
 
-							result = convertStreamToString(instream);
+							resultAisleNumber = convertStreamToString(instream);
 
-							if (!result.equals("-1")) {
+							if (!resultAisleNumber.equals("-1")) {
 								lookupResult = true;
-
-								String resultFormat = context.getResources()
-										.getString(R.string.food_lookup_result);
-								String toSay = String.format(resultFormat,
-										currKeyword, result);
-								Log.d(TAG, "heard a word " + currKeyword);
-								executor.speak(toSay);
 							}
 
 						} finally {
@@ -270,6 +272,44 @@ public class DeviceLookup implements VoiceActionCommand
 
 			return null;
 		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			
+			VoiceActionCommand secondOfferYes = new SecondOfferYes(context, executor);
+			VoiceActionCommand secondOfferNo = new SecondOfferNo(context, executor);
+			String secondOfferPrompt;
+			String toSay;
+			
+			if (lookupResult) {
+				if (AppState.getAppStateInstance().getCurrentState() == AppState.Initialized) {
+					AppState.getAppStateInstance().setCurrentState(AppState.FoundRequiredProduct);
+				}
+				secondOfferPrompt= context.getString(R.string.second_offer_for_help);
+				toSay = String.format(secondOfferPrompt, currentProduct, resultAisleNumber);
+				
+			}
+			else {
+				if (AppState.getAppStateInstance().getCurrentState() == AppState.Initialized) {
+					AppState.getAppStateInstance().setCurrentState(AppState.UnFoundRequiredProduct);
+				}
+				secondOfferPrompt = context.getString(R.string.second_offer_for_retry);
+				toSay = secondOfferPrompt;
+			}
+			
+			MultiCommandVoiceAction responseAction = new MultiCommandVoiceAction(Arrays.asList(secondOfferYes, secondOfferNo));
+			responseAction.setPrompt(toSay);
+			responseAction.setSpokenPrompt(toSay);
+			
+            responseAction.setNotUnderstood(new WhyNotUnderstoodListener(
+                    context, executor, true));
+            
+            executor.execute(responseAction);
+		}
+		
+		
 	}
     
 }

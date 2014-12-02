@@ -1,6 +1,7 @@
 package info.shangma.voicecontrolrobot;
 
 
+import info.shangma.utils.string.Inflector;
 import info.shangma.voicecontrolrobot.util.SimpleHttpGetTask;
 
 import java.io.IOException;
@@ -37,6 +38,32 @@ public class MainActivity extends Activity {
 	
 	}
 
+	private void startDetectionService() {
+		Intent intent = new Intent(MainActivity.this, DetectionService.class);
+		startService(intent);
+	}
+	
+	private void stopDetectionService() {
+		Intent intent = new Intent(MainActivity.this, DetectionService.class);
+		intent.putExtra(DetectionService.ACTIVATION_STOP_INTENT_KEY, true);
+		startService(intent);
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+//		stopDetectionService();
+	}
+
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		startDetectionService();
+	}
+	
 	
 	public void onStartService (View view) {
 				
@@ -49,36 +76,9 @@ public class MainActivity extends Activity {
 	}
 	
 	public void onTestService (View view) {
-		Log.d(TAG, "test service");		
+		Log.d(TAG, "test service");
+		Inflector mInflector = Inflector.getInstance();
+		Log.d(TAG, mInflector.singularize(new String("tax")));
+		
 	}
-	
-	private void startDetectionService() {
-		Intent intent = new Intent(MainActivity.this, DetectionService.class);
-		startService(intent);
-	}
-	
-	private void stopDetectionService() {
-		Intent intent = new Intent(MainActivity.this, DetectionService.class);
-		intent.putExtra(DetectionService.ACTIVATION_STOP_INTENT_KEY, true);
-		startService(intent);
-	}
-
-
-
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		stopDetectionService();
-	}
-
-
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-//		startDetectionService();
-	}
-	
-	
 }

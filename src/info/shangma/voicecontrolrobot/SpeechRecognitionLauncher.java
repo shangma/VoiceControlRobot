@@ -15,10 +15,9 @@
  */
 package info.shangma.voicecontrolrobot;
 
-import info.shangma.voicecontrolrobot.comm.KeywordQuery;
 import info.shangma.voicecontrolrobot.command.CancelCommand;
-import info.shangma.voicecontrolrobot.command.DeviceLookup;
-import info.shangma.voicecontrolrobot.data.FtsIndexedFoodDatabase;
+import info.shangma.voicecontrolrobot.command.ProductLookup;
+import info.shangma.voicecontrolrobot.util.AppState;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,6 +48,7 @@ import root.gast.speech.voiceaction.VoiceActionCommand;
 import root.gast.speech.voiceaction.VoiceActionExecutor;
 import root.gast.speech.voiceaction.WhyNotUnderstoodListener;
 import android.R.integer;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -76,8 +76,6 @@ public class SpeechRecognitionLauncher extends
 	private VoiceActionExecutor executor;
 
 	private VoiceAction lookupVoiceAction;
-	private FtsIndexedFoodDatabase foodDb;
-
 	private TextView log;
 
 
@@ -92,20 +90,6 @@ public class SpeechRecognitionLauncher extends
 //		initDbs();
 		initDialog();
 		Log.i(TAG, "finish initialization");
-	}
-
-	private void initDbs() {
-		foodDb = FtsIndexedFoodDatabase.getInstance(this);
-
-		if (foodDb.isEmpty()) {
-			Log.d(TAG, "loading foods");
-			InputStream stream = getResources().openRawResource(R.raw.foods);
-			try {
-				foodDb.loadFrom(stream);
-			} catch (IOException io) {
-				Log.d(TAG, "failed to load db");
-			}
-		}
 	}
 
 	private void initDialog() {
@@ -129,10 +113,12 @@ public class SpeechRecognitionLauncher extends
 	@Override
 	public void onSuccessfulInit(TextToSpeech tts) {
 		super.onSuccessfulInit(tts);
-//		prompt();
 		
 		executor.setTts(getTts());
-		System.out.println("1. has prompt or not: " + lookupVoiceAction.hasSpokenPrompt());
+		if (AppState.getAppStateInstance().getCurrentState() != AppState.Initialized) {
+			AppState.getAppStateInstance().setCurrentState(AppState.Initialized);
+		}
+		Log.d(TAG, "Ready for the first query");
 		executor.execute(lookupVoiceAction);
 	}
 
@@ -141,29 +127,17 @@ public class SpeechRecognitionLauncher extends
 		final String LOOKUP_PROMPT = getResources().getString(
 				R.string.speech_launcher_prompt);
 
-		FtsIndexedFoodDatabase foodDb = FtsIndexedFoodDatabase
-				.getInstance(SpeechRecognitionLauncher.this);
-
 		// match it with two levels of strictness
 		boolean relaxed = false;
 
 		VoiceActionCommand cancelCommand = new CancelCommand(this, executor);
-//		VoiceActionCommand removeCommand = new RemoveFood(this, executor,
-//				foodDb, relaxed);
-//		VoiceActionCommand addCommand = new AddFood(this, executor, foodDb, relaxed);
-		VoiceActionCommand lookupCommand = new DeviceLookup(this, executor, foodDb);
-
-		relaxed = true;
-//		VoiceActionCommand removeCommandRelaxed = new RemoveFood(this,
-//				executor, foodDb, relaxed);
-//		VoiceActionCommand addCommandRelaxed = new AddFood(this, executor,
-//				foodDb, relaxed);
+		VoiceActionCommand lookupCommand = new ProductLookup(this, executor);
 
 		VoiceAction voiceAction = new MultiCommandVoiceAction(Arrays.asList(
 				cancelCommand, lookupCommand));
 		// don't retry
 		voiceAction.setNotUnderstood(new WhyNotUnderstoodListener(this,
-				executor, false));
+				executor, true));
 		voiceAction.setPrompt(LOOKUP_PROMPT);
 
 		voiceAction.setSpokenPrompt(LOOKUP_PROMPT);
@@ -182,14 +156,6 @@ public class SpeechRecognitionLauncher extends
 	 * super class handles registering the UtteranceProgressListener and calling
 	 * this
 	 */
-	@Override
-	public void onDone(String utteranceId) {
-		if (utteranceId.equals(ON_DONE_PROMPT_TTS_PARAM)) {
-			executor.setTts(getTts());
-			executor.execute(lookupVoiceAction);
-		}
-	}
-
 
 	@Override
 	protected void receiveWhatWasHeard(List<String> heard,
@@ -205,16 +171,14 @@ public class SpeechRecognitionLauncher extends
 		}
 
 		executor.handleReceiveWhatWasHeard(heard, confidenceScores);
-		
-		try {
-			Thread.sleep(4000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		executor.execute(lookupVoiceAction);
 
 	}
-	
+
+	@Override
+	protected void recognitionFailure(int errorCode) {
+		// TODO Auto-generated method stub
+		super.recognitionFailure(errorCode);
+		
+		executor.reExecute(null);	// here to handle unclear recognition
+	}
 }

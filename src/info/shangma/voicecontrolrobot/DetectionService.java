@@ -7,6 +7,7 @@ import root.gast.speech.text.WordList;
 import root.gast.speech.text.match.SoundsLikeWordMatcher;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -20,7 +21,7 @@ public class DetectionService extends Service implements RecognitionListener {
 	private static final String TAG = "Detection Service";
 
 	public static final String ACTIVATION_STOP_INTENT_KEY = "ACTIVATION_STOP_INTENT_KEY";
-	
+    public static final String ACTIVATION_TYPE_INTENT_KEY = "ACTIVATION_TYPE_INTENT_KEY";
 
 	private static final String TARGETWORDS = "hello";
 
@@ -43,24 +44,41 @@ public class DetectionService extends Service implements RecognitionListener {
 					.createSpeechRecognizer(DetectionService.this);
 		}
 	}
+	
+    public static Intent makeStartServiceIntent(Context context,
+            String activationType)
+    {
+        Intent i = new Intent(context, DetectionService.class);
+        i.putExtra(ACTIVATION_TYPE_INTENT_KEY, activationType);
+        return i;
+    }
+
+    public static Intent makeServiceStopIntent(Context context)
+    {
+        Intent i = new Intent(context, DetectionService.class);
+        i.putExtra(ACTIVATION_STOP_INTENT_KEY, true);
+        return i;
+    }
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// TODO Auto-generated method stub
 
-		if (intent.hasExtra(ACTIVATION_STOP_INTENT_KEY)) {
+		if (intent != null) {
 
-			Log.d(TAG, "stop service intent");
-			stopDeteciotn();
-		} else {
+			if (intent.hasExtra(ACTIVATION_STOP_INTENT_KEY)) {
 
-			if (isStarted) {
-				Log.i(TAG, "Service already started");
+				Log.d(TAG, "stop service intent");
+				stopDeteciotn();
 			} else {
-				startDetection();
+
+				if (isStarted) {
+					Log.i(TAG, "Service already started");
+				} else {
+					startDetection();
+				}
 			}
 		}
-
 		return START_REDELIVER_INTENT;
 	}
 
