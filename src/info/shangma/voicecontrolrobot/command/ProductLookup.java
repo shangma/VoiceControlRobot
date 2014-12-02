@@ -316,8 +316,9 @@ public class ProductLookup implements VoiceActionCommand
 				toSay = secondOfferPrompt;
 			}
 			
+			String simplePromptForLook = "Yes or No?";
 			MultiCommandVoiceAction responseAction = new MultiCommandVoiceAction(Arrays.asList(secondOfferYes, secondOfferNo));
-			responseAction.setPrompt(toSay);
+			responseAction.setPrompt(simplePromptForLook);
 			responseAction.setSpokenPrompt(toSay);
 			
             responseAction.setNotUnderstood(new WhyNotUnderstoodListener(
