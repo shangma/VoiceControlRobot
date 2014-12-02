@@ -76,6 +76,13 @@ public class ProductLookup implements VoiceActionCommand
 	
 	private String currentProduct;
 	
+	public String[] catalog = {"none",
+								"seasonal", "outdoor and barbecue", "extension", "light", "vacuum",
+								"kitchen", "houseware", "houseware", "storage", "cleaning",
+								"bird and garden", "penst control", "connector", "drain and plumbing", "faucet",
+								"silicon and paint", "painting", "miscellaneous", "tools", "safety",
+								"electrical", "auto", "hanger and lock", "miscellaneous", "nut and screw"};
+	
 
 	
 	AndroidHttpClient client;
@@ -249,6 +256,7 @@ public class ProductLookup implements VoiceActionCommand
 
 							resultAisleNumber = convertStreamToString(instream);
 
+							Log.d(TAG, "i found aisle number is: " + resultAisleNumber);
 							if (!resultAisleNumber.equals("-1")) {
 								lookupResult = true;
 							}
@@ -288,7 +296,16 @@ public class ProductLookup implements VoiceActionCommand
 					AppState.getAppStateInstance().setCurrentState(AppState.FoundRequiredProduct);
 				}
 				secondOfferPrompt= context.getString(R.string.second_offer_for_help);
-				toSay = String.format(secondOfferPrompt, currentProduct, resultAisleNumber);
+				String[] aisleNumbers = resultAisleNumber.split(",");
+				Log.d(TAG, "the number of result is: " + aisleNumbers.length);
+				String aisleReport = new String();
+				for (int i = 0; i < aisleNumbers.length; i++) {
+					aisleReport += "aisle " + aisleNumbers[i];
+					int currentIndex = Integer.valueOf(aisleNumbers[i]);
+					aisleReport += " the " + catalog[currentIndex] + " category ";
+				}
+				toSay = String.format(secondOfferPrompt, currentProduct, aisleReport);
+				Log.d(TAG, "to say is: " +  toSay);
 				
 			}
 			else {

@@ -31,7 +31,7 @@
 
     <string name="speech_launcher_prompt">What can I get you today?</string>
 	<string name="product_lookup_result">I found %1$s at aisle %2$s</string>
-	<string name="second_offer_for_help">I found %1$s at aisle %2$s. Do you need anything else? Yes or No.</string>
+	<string name="second_offer_for_help">I found %1$s at %2$s. Do you need anything else? Yes or No.</string>
     <string name="second_offer_accepted">OK. What else do you need?</string>
     <string name="second_offer_denied">Thank you. Bye!</string>
     
