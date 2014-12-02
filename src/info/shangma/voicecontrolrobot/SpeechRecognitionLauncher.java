@@ -17,6 +17,8 @@ package info.shangma.voicecontrolrobot;
 
 import info.shangma.voicecontrolrobot.command.CancelCommand;
 import info.shangma.voicecontrolrobot.command.ProductLookup;
+import info.shangma.voicecontrolrobot.command.SecondOfferNo;
+import info.shangma.voicecontrolrobot.command.SecondOfferYes;
 import info.shangma.voicecontrolrobot.util.AppState;
 
 import java.io.IOException;
@@ -52,6 +54,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -78,7 +81,11 @@ public class SpeechRecognitionLauncher extends
 	private VoiceAction lookupVoiceAction;
 	private TextView log;
 
-
+	private long prevFailureTimeStamp = -1L;
+	private long currentFailureTimeStamp = -1L;
+	private int failureRetry;
+	private int TIME_INTERVAL_REPEATABLE = 8; // ms
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -120,6 +127,7 @@ public class SpeechRecognitionLauncher extends
 		}
 		Log.d(TAG, "Ready for the first query");
 		executor.execute(lookupVoiceAction);
+		failureRetry = 3;
 	}
 
 	private VoiceAction makeLookup() {
@@ -179,6 +187,55 @@ public class SpeechRecognitionLauncher extends
 		// TODO Auto-generated method stub
 		super.recognitionFailure(errorCode);
 		
-		executor.reExecute(null);	// here to handle unclear recognition
+		//handle unclear recognition
+		currentFailureTimeStamp = SystemClock.currentThreadTimeMillis();
+		if (prevFailureTimeStamp == -1) {
+			prevFailureTimeStamp = currentFailureTimeStamp;
+		}
+
+		long timeDifference = currentFailureTimeStamp - prevFailureTimeStamp;
+		System.out.println("time lapse: " + timeDifference);
+		System.out.println("leftover: " + failureRetry);
+
+		if ((timeDifference < TIME_INTERVAL_REPEATABLE) && (failureRetry > 0)) {
+
+			// repeat current recognition
+			repeatCurrentRecognition();
+		} else if ((timeDifference <= TIME_INTERVAL_REPEATABLE)
+				&& (failureRetry <= 0)) {
+			// run out of retry, go back to the beginning
+
+			failureRetry = 3;
+			AppState.getAppStateInstance().setCurrentState(AppState.EndOfQuery);
+			this.finish();
+		} else {
+			// repeat current recognition
+			failureRetry = 3;
+			prevFailureTimeStamp = currentFailureTimeStamp;
+			repeatCurrentRecognition();
+		}
+
+	}
+	
+	private void repeatCurrentRecognition() {
+		
+		failureRetry--;
+
+		
+		switch (AppState.getAppStateInstance().getCurrentState()) {
+		case AppState.Initialized:
+		case AppState.FoundRequiredProduct:
+		case AppState.UnFoundRequiredProduct:
+			
+//			AppState.getAppStateInstance().setCurrentState(AppState.UnclearRecognition);
+		
+			String toSay = this.getString(R.string.unclear_recognition_prompt);
+			executor.speak(toSay, VoiceActionExecutor.EXECUTE_AFTER_SPEAK);
+
+			break;
+
+		default:
+			break;
+		}
 	}
 }

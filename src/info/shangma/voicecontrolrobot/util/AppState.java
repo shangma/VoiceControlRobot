@@ -11,16 +11,20 @@ public class AppState {
 	public static final int UnFoundRequiredProduct = 3;
 	public static final int RetryLastQuery = 4;
 	
+	public static final int UnclearRecognition = 5;
+	
 	public static final int EndOfQuery = 8;
 
 	
 	private static AppState instance;
 	private int currentState = Uninitialized;
+	private int prevState = currentState;
 	
 
 	
 	private AppState() {
 		currentState = Initialized;
+		prevState = currentState;
 	}
 	
 	public static AppState getAppStateInstance() {
@@ -38,7 +42,13 @@ public class AppState {
 	}
 	
 	public void setCurrentState(int state) {
+		prevState = currentState;
 		currentState = state;
+	}
+	
+	public boolean isStateChanged(){
+		
+		return (!(currentState == prevState));
 	}
 	
 	

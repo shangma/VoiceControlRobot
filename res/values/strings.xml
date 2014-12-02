@@ -39,6 +39,9 @@
     <string name="second_try_accepted">OK. Could you please speak more clearly and slowly? </string>
     <string name="second_try_denied">I am sorry. Good day!</string>
     
+    <string name="unclear_recognition_prompt">I can not hear you clearly. Can you say it again? </string>
+    
+    
     <string name="food_add_calories_prompt">How many calories for %1$s?</string>
     <string name="food_add_result">added %1$s with %2$s calories.</string>
     <string name="food_compare_result">%1$s has more calories than %2$s</string>
