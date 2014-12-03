@@ -194,8 +194,8 @@ public class SpeechRecognitionLauncher extends
 		}
 
 		long timeDifference = currentFailureTimeStamp - prevFailureTimeStamp;
-		System.out.println("time lapse: " + timeDifference);
-		System.out.println("leftover: " + failureRetry);
+//		System.out.println("time lapse: " + timeDifference);
+//		System.out.println("leftover: " + failureRetry);
 
 		if ((timeDifference < TIME_INTERVAL_REPEATABLE) && (failureRetry > 0)) {
 

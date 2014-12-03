@@ -5,7 +5,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="d_ok">Ok</string>
-    <string name="speechRecognitionFailed">Did not understand, please try again</string>
     <string name="food_edit_prompt">Add &lt;food name&gt; or remove &lt;food name&gt;</string>
     <string name="food_lookup_prompt">Say a fruit or vegetable</string>
     <string name="food_remove_failed">%1$s not removed</string>
@@ -37,7 +36,7 @@
     
 	<string name="second_offer_for_retry">Do you want to try again? Yes or No.</string>
     <string name="second_try_accepted">OK. Could you please speak more clearly and slowly? </string>
-    <string name="second_try_denied">I am sorry. Good day!</string>
+    <string name="second_try_denied">Thank you. Good day!</string>
     
     <string name="unclear_recognition_prompt">I can not hear you clearly. Can you say it again? </string>
     

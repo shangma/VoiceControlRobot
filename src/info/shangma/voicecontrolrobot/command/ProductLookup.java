@@ -105,7 +105,8 @@ public class ProductLookup implements VoiceActionCommand
     
     public boolean interpret(WordList heard, float[] confidence)
     {
-    	
+    	lookupResult = false;
+	
     	mTask = new SimpleHttpGetTask();
     	try {
 			mTask.execute(heard.getSource());
@@ -304,8 +305,18 @@ public class ProductLookup implements VoiceActionCommand
 					int currentIndex = Integer.valueOf(aisleNumbers[i]);
 					aisleReport += " the " + catalog[currentIndex] + " category ";
 				}
-				toSay = String.format(secondOfferPrompt, currentProduct, aisleReport);
+				toSay = String.format(secondOfferPrompt, currentProduct, " aisle " + resultAisleNumber);
 				Log.d(TAG, "to say is: " +  toSay);
+				
+				String simplePromptForLook = "Yes or No?";
+				MultiCommandVoiceAction responseAction = new MultiCommandVoiceAction(Arrays.asList(secondOfferYes, secondOfferNo));
+				responseAction.setPrompt(simplePromptForLook);
+				responseAction.setSpokenPrompt(toSay);
+				
+	            responseAction.setNotUnderstood(new WhyNotUnderstoodListener(
+	                    context, executor, true));
+	            
+	            executor.execute(responseAction);
 				
 			}
 			else {
@@ -316,15 +327,7 @@ public class ProductLookup implements VoiceActionCommand
 				toSay = secondOfferPrompt;
 			}
 			
-			String simplePromptForLook = "Yes or No?";
-			MultiCommandVoiceAction responseAction = new MultiCommandVoiceAction(Arrays.asList(secondOfferYes, secondOfferNo));
-			responseAction.setPrompt(simplePromptForLook);
-			responseAction.setSpokenPrompt(toSay);
-			
-            responseAction.setNotUnderstood(new WhyNotUnderstoodListener(
-                    context, executor, true));
-            
-            executor.execute(responseAction);
+
 		}
 		
 		
