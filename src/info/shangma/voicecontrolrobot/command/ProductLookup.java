@@ -20,6 +20,7 @@ import info.shangma.voicecontrolrobot.util.AppState;
 import info.shangma.voicecontrolrobot.util.CommonUtil;
 import info.shangma.voicecontrolrobot.R;
 import info.shangma.voicecontrolrobot.SpeechActivationBroadcastReceiver;
+import info.shangma.voicecontrolrobot.SpeechRecognitionLauncher;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -118,6 +119,10 @@ public class ProductLookup implements VoiceActionCommand
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+    	
+    	if (lookupResult) {
+			((SpeechRecognitionLauncher)this.context).setLog(currentProduct + " is at Aisle: " + resultAisleNumber);
 		}
     	
     	Log.i(TAG, "ready to return");
@@ -307,6 +312,7 @@ public class ProductLookup implements VoiceActionCommand
 				}
 				toSay = String.format(secondOfferPrompt, currentProduct, " aisle " + resultAisleNumber);
 				Log.d(TAG, "to say is: " +  toSay);
+				
 				
 				String simplePromptForLook = "Yes or No?";
 				MultiCommandVoiceAction responseAction = new MultiCommandVoiceAction(Arrays.asList(secondOfferYes, secondOfferNo));

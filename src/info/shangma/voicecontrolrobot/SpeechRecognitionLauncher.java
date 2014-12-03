@@ -107,10 +107,14 @@ public class SpeechRecognitionLauncher extends
 
 	}
 
-	private void clearLog() {
+	public void clearLog() {
 		log.setText("");
 	}
 
+	public void setLog(String theLog) {
+		log.setText(theLog);
+	}
+	
 	private void appendToLog(String appendThis) {
 		String currentLog = log.getText().toString();
 		currentLog = currentLog + "\n" + appendThis;
