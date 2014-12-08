@@ -17,6 +17,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.parse.ParsePush;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -76,6 +78,7 @@ public class MainActivity extends Activity implements OnInitListener {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		Log.d(TAG, "onResume got called for MainActivity");
 		startDetectionService();
 	}
 	
@@ -91,9 +94,10 @@ public class MainActivity extends Activity implements OnInitListener {
 	}
 	
 	public void onTestService (View view) {
-		Log.d(TAG, "test service");
-		Inflector mInflector = Inflector.getInstance();
-		Log.d(TAG, mInflector.singularize(new String("tax")));
+		ParsePush push = new ParsePush();
+		push.setChannel("ActivateRobot");
+		push.setMessage("Got the Notfication.");
+		push.sendInBackground();;
 		
 	}
 	
