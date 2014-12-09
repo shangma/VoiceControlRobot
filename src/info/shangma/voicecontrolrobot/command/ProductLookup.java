@@ -122,10 +122,14 @@ public class ProductLookup implements VoiceActionCommand
 		}
     	
     	if (lookupResult) {
-			((SpeechRecognitionLauncher)this.context).setLog(currentProduct + " is at Aisle: " + resultAisleNumber);
+			((SpeechRecognitionLauncher)this.context).setLog(currentProduct + " is at Aisle: " + resultAisleNumber);	
+			
+			String result = context.getString(R.string.product_lookup_result);
+			String toSay = String.format(result, currentProduct, resultAisleNumber);
+			
+			executor.speak(toSay, VoiceActionExecutor.END_OF_QUERY_SPEAK);
 		}
     	
-    	Log.i(TAG, "ready to return");
     	return lookupResult ;
     }
     
@@ -292,6 +296,7 @@ public class ProductLookup implements VoiceActionCommand
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			
+			/*
 			VoiceActionCommand secondOfferYes = new SecondOfferYes(context, executor);
 			VoiceActionCommand secondOfferNo = new SecondOfferNo(context, executor);
 			String secondOfferPrompt;
@@ -333,6 +338,7 @@ public class ProductLookup implements VoiceActionCommand
 				toSay = secondOfferPrompt;
 			}
 			
+			*/
 
 		}
 		

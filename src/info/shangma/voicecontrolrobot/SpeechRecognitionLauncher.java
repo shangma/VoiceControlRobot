@@ -149,7 +149,7 @@ public class SpeechRecognitionLauncher extends
 				cancelCommand, lookupCommand));
 		// don't retry
 		voiceAction.setNotUnderstood(new WhyNotUnderstoodListener(this,
-				executor, true));
+				executor, false));
 		voiceAction.setPrompt(LOOKUP_PROMPT);
 
 		voiceAction.setSpokenPrompt(LOOKUP_PROMPT);
