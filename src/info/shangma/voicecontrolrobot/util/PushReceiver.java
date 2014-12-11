@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.parse.ParsePushBroadcastReceiver;
+import com.wowwee.robome.RoboMeCommands.RobotCommand;
 
 public class PushReceiver extends ParsePushBroadcastReceiver{
 	
 	private static final String TAG = "Push Receiver";
+	private static boolean robotMovement = false;
 
 	@Override
 	protected void onPushOpen(Context arg0, Intent arg1) {
@@ -22,11 +24,25 @@ public class PushReceiver extends ParsePushBroadcastReceiver{
 	protected void onPushReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
 		super.onPushReceive(context, intent);
-		Intent i = new Intent(context, SpeechRecognitionLauncher.class);
-//        i.putExtras(intent.getExtras());
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(i);
-        
+		
+		if (CommonUtil.ISCLIENT == 1) {
+			Log.d(TAG, "Got Notified!");
+			Log.d(TAG, "Version " + MainActivity.roboMe.getLibVersion());
+			
+			robotMovement = !robotMovement;
+			
+			Log.i(TAG, "current move mode is: " + robotMovement);
+			
+			if (robotMovement) {
+				MainActivity.roboMe.sendCommand(RobotCommand.kRobot_HeadTiltAllDown);
+			} else {
+				MainActivity.roboMe.sendCommand(RobotCommand.kRobot_HeadTiltAllUp);
+			}
+		} else if (CommonUtil.ISCLIENT == 0) {
+			Intent i = new Intent(context, SpeechRecognitionLauncher.class);
+	        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	        context.startActivity(i);
+		}       
         
 	}
 

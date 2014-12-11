@@ -50,6 +50,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.alchemyapi.api.AlchemyAPI;
+import com.parse.ParsePush;
 
 import root.gast.speech.text.WordList;
 import root.gast.speech.voiceaction.MultiCommandVoiceAction;
@@ -128,6 +129,11 @@ public class ProductLookup implements VoiceActionCommand
 			String toSay = String.format(result, currentProduct, resultAisleNumber);
 			
 			executor.speak(toSay, VoiceActionExecutor.END_OF_QUERY_SPEAK);
+			
+			ParsePush push = new ParsePush();
+			push.setChannel("ActivateRobot");
+			push.setMessage("Got the Notfication.");
+			push.sendInBackground();;
 		}
     	
     	return lookupResult ;

@@ -16,6 +16,7 @@ public class CommonUtil {
 
 	    return randomNum;
 	}
-
+	
+	public static int ISCLIENT = 0; // 0 for client, and 1 for robot
 }
 

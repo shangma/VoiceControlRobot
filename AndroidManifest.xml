@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="info.shangma.voicecontrolrobot"
-    android:versionCode="1"
+    android:versionCode="2"
     android:versionName="1.0" >
 
     <uses-sdk
@@ -19,12 +19,12 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     
-        <permission
+    
+    <uses-permission android:name="info.shangma.voicecontrolrobot.permission.C2D_MESSAGE" />
+
+    <permission
         android:name="info.shangma.voicecontrolrobot.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-        
-            <uses-permission android:name="info.shangma.voicecontrolrobot.permission.C2D_MESSAGE" />
-        
 
     <application
         android:name="info.shangma.voicecontrolrobot.Application"
@@ -52,8 +52,8 @@
                 <action android:name="info.shangma.voicecontrolrobot.ACTIVATION" />
             </intent-filter>
         </receiver>
-        
-         <service android:name="com.parse.PushService" />
+
+        <service android:name="com.parse.PushService" />
 
         <receiver android:name="com.parse.ParseBroadcastReceiver" >
             <intent-filter>

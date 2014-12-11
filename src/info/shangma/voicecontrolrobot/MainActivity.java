@@ -2,6 +2,7 @@ package info.shangma.voicecontrolrobot;
 
 
 import info.shangma.utils.string.Inflector;
+import info.shangma.voicecontrolrobot.util.CommonUtil;
 import info.shangma.voicecontrolrobot.util.SimpleHttpGetTask;
 
 import java.io.IOException;
@@ -18,6 +19,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.parse.ParsePush;
+import com.wowwee.robome.RoboMe;
+import com.wowwee.robome.RoboMe.RoboMeListener;
+import com.wowwee.robome.RoboMeCommands.IncomingRobotCommand;
+import com.wowwee.robome.SensorStatus;
 
 import android.app.Activity;
 import android.content.Context;
@@ -32,22 +37,32 @@ import android.speech.tts.TextToSpeech.OnInitListener;
 import android.util.Log;
 import android.view.View;
 
-public class MainActivity extends Activity implements OnInitListener {
+public class MainActivity extends Activity implements OnInitListener, RoboMeListener {
 	
 	private static final String TAG= "Main Activity From VR robot";
 	private TextToSpeech mTTS;
 
+	public static RoboMe roboMe;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		
+		if (CommonUtil.ISCLIENT == 1) {
+
+			setContentView(R.layout.robotface);
+			roboMe = new RoboMe(this, this);
+
+		} else if (CommonUtil.ISCLIENT == 0) {
+			setContentView(R.layout.activity_main);
+
+		}
+
 		
 //		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 //		StrictMode.setThreadPolicy(policy);
 	
 		mTTS = new TextToSpeech(this, this);
-
 	}
 
 	private void startDetectionService() {
@@ -71,6 +86,10 @@ public class MainActivity extends Activity implements OnInitListener {
 			mTTS.stop();
 			mTTS.shutdown();
 		}
+		
+		if (CommonUtil.ISCLIENT == 1) {
+			roboMe.stopListening();
+		}
 	}
 
 
@@ -79,7 +98,14 @@ public class MainActivity extends Activity implements OnInitListener {
 		// TODO Auto-generated method stub
 		super.onResume();
 		Log.d(TAG, "onResume got called for MainActivity");
-		startDetectionService();
+		
+		if (CommonUtil.ISCLIENT == 1) {
+			roboMe.setVolume(12);
+			roboMe.startListening();
+		} else if (CommonUtil.ISCLIENT == 0) {
+			startDetectionService();
+		}
+
 	}
 	
 	
@@ -94,10 +120,10 @@ public class MainActivity extends Activity implements OnInitListener {
 	}
 	
 	public void onTestService (View view) {
-		ParsePush push = new ParsePush();
-		push.setChannel("ActivateRobot");
-		push.setMessage("Got the Notfication.");
-		push.sendInBackground();;
+//		ParsePush push = new ParsePush();
+//		push.setChannel("ActivateRobot");
+//		push.setMessage("Got the Notfication.");
+//		push.sendInBackground();;
 		
 	}
 	
@@ -127,6 +153,47 @@ public class MainActivity extends Activity implements OnInitListener {
 			}
 			MainActivity.this.finish();
 		}
+	}
+
+	@Override
+	public void commandReceived(IncomingRobotCommand command) {
+		// TODO Auto-generated method stub
+		Log.d("RoboMe","Received event " + command);
+		
+		if(command.isSensorStatus()){
+			SensorStatus status = command.readSensorStatus();
+			Log.d("RoboMe",String.format("Edge: %b Chest 20cm: %b 50cm: %b 100cm: %b", status.edge, status.chest_20cm, status.chest_50cm, status.chest_100cm)); 
+		}
+	}
+
+	@Override
+	public void headsetPluggedIn() {
+		// TODO Auto-generated method stub
+		Log.d("RoboMe", "Headset plugged in");
+	}
+
+	@Override
+	public void headsetUnplugged() {
+		// TODO Auto-generated method stub
+		Log.d("RoboMe", "Headset unplugged");
+	}
+
+	@Override
+	public void roboMeConnected() {
+		// TODO Auto-generated method stub
+		Log.d("RoboMe", "RoboMe Connected");
+	}
+
+	@Override
+	public void roboMeDisconnected() {
+		// TODO Auto-generated method stub
+		Log.d("RoboMe", "RoboMe Disconnected");
+	}
+
+	@Override
+	public void volumeChanged(float volume) {
+		// TODO Auto-generated method stub
+		Log.d("RoboMe", "Volume changed to " + volume + "%");
 	} 
 	
 	
