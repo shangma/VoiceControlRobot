@@ -120,10 +120,10 @@ public class MainActivity extends Activity implements OnInitListener, RoboMeList
 	}
 	
 	public void onTestService (View view) {
-//		ParsePush push = new ParsePush();
-//		push.setChannel("ActivateRobot");
-//		push.setMessage("Got the Notfication.");
-//		push.sendInBackground();;
+		ParsePush push = new ParsePush();
+		push.setChannel("ActivateRobot");
+		push.setMessage("Got the Notfication.");
+		push.sendInBackground();;
 		
 	}
 	

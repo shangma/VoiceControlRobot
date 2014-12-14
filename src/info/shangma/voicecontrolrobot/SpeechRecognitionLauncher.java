@@ -56,6 +56,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.TextView;
@@ -95,7 +96,7 @@ public class SpeechRecognitionLauncher extends
 		
 		
 //		initDbs();
-		initDialog();
+		initDialog();		
 		Log.i(TAG, "finish initialization");
 	}
 
@@ -198,8 +199,6 @@ public class SpeechRecognitionLauncher extends
 		}
 
 		long timeDifference = currentFailureTimeStamp - prevFailureTimeStamp;
-//		System.out.println("time lapse: " + timeDifference);
-//		System.out.println("leftover: " + failureRetry);
 
 		if ((timeDifference < TIME_INTERVAL_REPEATABLE) && (failureRetry > 0)) {
 
@@ -230,9 +229,7 @@ public class SpeechRecognitionLauncher extends
 		case AppState.Initialized:
 		case AppState.FoundRequiredProduct:
 		case AppState.UnFoundRequiredProduct:
-			
-//			AppState.getAppStateInstance().setCurrentState(AppState.UnclearRecognition);
-		
+					
 			String toSay = this.getString(R.string.unclear_recognition_prompt);
 			executor.speak(toSay, VoiceActionExecutor.EXECUTE_AFTER_SPEAK);
 

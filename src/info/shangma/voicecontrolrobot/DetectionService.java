@@ -226,9 +226,15 @@ public class DetectionService extends Service implements RecognitionListener {
 		stop();
 
 		// broadcast result
-		Intent intent = new Intent(SpeechActivationBroadcastReceiver.ACTIVATION_RESULT_BROADCAST_NAME);
-		intent.putExtra(SpeechActivationBroadcastReceiver.ACTIVATION_RESULT_INTENT_KEY, success);
-		sendBroadcast(intent);
+//		Intent intent = new Intent(SpeechActivationBroadcastReceiver.ACTIVATION_RESULT_BROADCAST_NAME);
+//		intent.putExtra(SpeechActivationBroadcastReceiver.ACTIVATION_RESULT_INTENT_KEY, success);
+//		sendBroadcast(intent);
+		
+		
+		// start the launch directly
+        Intent i = new Intent(this, SpeechRecognitionLauncher.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        this.startActivity(i);
 
 		Log.i(TAG, "found it");
 		// always stop after receive an activation
