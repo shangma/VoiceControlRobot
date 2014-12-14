@@ -1,4 +1,3 @@
-
 package info.shangma.voicecontrolrobot.command;
 
 import info.shangma.utils.string.Inflector;
@@ -109,7 +108,7 @@ public class ProductLookup implements VoiceActionCommand
 		}
     	
     	if (lookupResult) {
-			((SpeechRecognitionLauncher)this.context).setLog(currentProduct + " is at Aisle: " + resultAisleNumber);	
+//			((SpeechRecognitionLauncher)this.context).setLog(currentProduct + " is at Aisle: " + resultAisleNumber);	
 			
 			String result = context.getString(R.string.product_lookup_result);
 			String toSay = String.format(result, currentProduct, resultAisleNumber);

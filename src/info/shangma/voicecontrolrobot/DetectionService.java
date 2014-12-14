@@ -45,15 +45,13 @@ public class DetectionService extends Service implements RecognitionListener {
 		}
 	}
 	
-    public static Intent makeStartServiceIntent(Context context,
-            String activationType)
+    public static Intent makeStartServiceIntent(Context context)
     {
         Intent i = new Intent(context, DetectionService.class);
-        i.putExtra(ACTIVATION_TYPE_INTENT_KEY, activationType);
         return i;
     }
 
-    public static Intent makeServiceStopIntent(Context context)
+    public static Intent makeStopServiceIntent(Context context)
     {
         Intent i = new Intent(context, DetectionService.class);
         i.putExtra(ACTIVATION_STOP_INTENT_KEY, true);

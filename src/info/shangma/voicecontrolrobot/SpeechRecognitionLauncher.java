@@ -1,18 +1,3 @@
-/*
- * Copyright 2012 Greg Milette and Adam Stroud
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * 		http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package info.shangma.voicecontrolrobot;
 
 import info.shangma.voicecontrolrobot.command.CancelCommand;
@@ -82,7 +67,7 @@ public class SpeechRecognitionLauncher extends
 	private VoiceActionExecutor executor;
 
 	private VoiceAction lookupVoiceAction;
-	private TextView log;
+//	private TextView log;
 
 	private long prevFailureTimeStamp = -1L;
 	private long currentFailureTimeStamp = -1L;
@@ -94,9 +79,9 @@ public class SpeechRecognitionLauncher extends
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fooddialogmulti);
+		setContentView(R.layout.launcher_voice_recognition);
  
-		log = (TextView) findViewById(R.id.tv_resultlog);
+//		log = (TextView) findViewById(R.id.tv_resultlog);
 		mSoundPlayer = new SoundPoolPlayerEx(this);
 		
 		initDialog();		
@@ -111,19 +96,19 @@ public class SpeechRecognitionLauncher extends
 		executor.setSoundPlayer(mSoundPlayer);
 	}
 
-	public void clearLog() {
-		log.setText("");
-	}
-
-	public void setLog(String theLog) {
-		log.setText(theLog);
-	}
-	
-	private void appendToLog(String appendThis) {
-		String currentLog = log.getText().toString();
-		currentLog = currentLog + "\n" + appendThis;
-		log.setText(currentLog);
-	}
+//	public void clearLog() {
+//		log.setText("");
+//	}
+//
+//	public void setLog(String theLog) {
+//		log.setText(theLog);
+//	}
+//	
+//	private void appendToLog(String appendThis) {
+//		String currentLog = log.getText().toString();
+//		currentLog = currentLog + "\n" + appendThis;
+//		log.setText(currentLog);
+//	}
 
 	@Override
 	public void onSuccessfulInit(TextToSpeech tts) {
@@ -182,15 +167,16 @@ public class SpeechRecognitionLauncher extends
 
 		Log.d(TAG, "I just received " + heard.size());
 
-		clearLog();
-		for (int i = 0; i < heard.size(); i++) {
-			appendToLog(heard.get(i) + " " + confidenceScores[i]);
-		}
+//		clearLog();
+//		for (int i = 0; i < heard.size(); i++) {
+//			appendToLog(heard.get(i) + " " + confidenceScores[i]);
+//		}
 
 		executor.handleReceiveWhatWasHeard(heard, confidenceScores);
 
 	}
 
+	/*
 	@Override
 	protected void recognitionFailure(int errorCode) {
 		// TODO Auto-generated method stub
@@ -223,7 +209,7 @@ public class SpeechRecognitionLauncher extends
 		}
 
 	}
-	
+	*/
 	private void repeatCurrentRecognition() {
 		
 		failureRetry--;

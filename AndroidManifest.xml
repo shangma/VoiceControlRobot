@@ -31,10 +31,11 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,7 +43,9 @@
             </intent-filter>
         </activity>
         <activity android:name="info.shangma.voicecontrolrobot.VoiceRecognitionActivity" />
-        <activity android:name="info.shangma.voicecontrolrobot.SpeechRecognitionLauncher" />
+        <activity android:name="info.shangma.voicecontrolrobot.AcknowledgementPresentActivity" />
+        <activity android:name="info.shangma.voicecontrolrobot.SpeechRecognitionLauncher" 
+            android:screenOrientation="landscape" />
         <activity android:name="info.shangma.voicecontrolrobot.SpeechRecognitionResultsActivity" />
 
         <service android:name="info.shangma.voicecontrolrobot.DetectionService" />

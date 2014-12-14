@@ -1,17 +1,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/khaki"
+    android:background="#003300"
     android:orientation="vertical" >
-    
-    <TextView 
+
+    <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="0.33"
         android:gravity="center"
-        android:textSize="40dp"
-        android:text="Say &quot;Hello&quot; to Start"/>
+        android:text="I can help you to locate things!"
+        android:textColor="@color/background_white"
+        android:textSize="80sp" />
 
+    <ImageButton
+        android:id="@+id/startBtn"
+        style="@style/ImageButtonOnMain"
+        android:layout_weight="1"      
+        android:onClick="onClickStart"
+        android:src="@drawable/start" />
+
+    <!--
     <Button
         android:id="@+id/startServiceBtn"
         style="@style/ButtonOnMain"
@@ -25,13 +34,13 @@
         android:background="@drawable/btn_red"
         android:onClick="onStopService"
         android:text="Force to Stop" />
-    
-    
-        <Button
+
+    <Button
         android:id="@+id/testServiceBtn"
         style="@style/ButtonOnMain"
         android:background="@drawable/btn_black"
         android:onClick="onTestService"
         android:text="Test Service" />
+    -->
 
 </LinearLayout>

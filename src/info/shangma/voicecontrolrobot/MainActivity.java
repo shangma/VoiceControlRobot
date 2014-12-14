@@ -55,7 +55,6 @@ public class MainActivity extends Activity implements OnInitListener, RoboMeList
 
 		} else if (CommonUtil.ISCLIENT == 0) {
 			setContentView(R.layout.activity_main);
-
 		}
 
 		
@@ -66,13 +65,12 @@ public class MainActivity extends Activity implements OnInitListener, RoboMeList
 	}
 
 	private void startDetectionService() {
-		Intent intent = new Intent(MainActivity.this, DetectionService.class);
+		Intent intent = DetectionService.makeStartServiceIntent(this);
 		startService(intent);
 	}
 	
 	private void stopDetectionService() {
-		Intent intent = new Intent(MainActivity.this, DetectionService.class);
-		intent.putExtra(DetectionService.ACTIVATION_STOP_INTENT_KEY, true);
+		Intent intent = DetectionService.makeStopServiceIntent(this);
 		startService(intent);
 	}
 
@@ -80,7 +78,7 @@ public class MainActivity extends Activity implements OnInitListener, RoboMeList
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-//		stopDetectionService();
+		stopDetectionService();
 		
 		if (mTTS != null) {
 			mTTS.stop();
@@ -103,12 +101,18 @@ public class MainActivity extends Activity implements OnInitListener, RoboMeList
 			roboMe.setVolume(12);
 			roboMe.startListening();
 		} else if (CommonUtil.ISCLIENT == 0) {
-			startDetectionService();
+//			startDetectionService();
 		}
 
 	}
 	
 	
+	public void onClickStart(View view) {
+		
+		Intent i = new Intent(this, SpeechRecognitionLauncher.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        this.startActivity(i);
+	}
 	public void onStartService (View view) {
 				
 		startDetectionService();
