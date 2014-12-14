@@ -20,6 +20,7 @@ import info.shangma.voicecontrolrobot.command.ProductLookup;
 import info.shangma.voicecontrolrobot.command.SecondOfferNo;
 import info.shangma.voicecontrolrobot.command.SecondOfferYes;
 import info.shangma.voicecontrolrobot.util.AppState;
+import info.shangma.voicecontrolrobot.util.SoundPoolPlayerEx;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +45,7 @@ import org.xml.sax.SAXException;
 
 import root.gast.speech.SpeechRecognizingAndSpeakingActivity;
 import root.gast.speech.tts.TextToSpeechUtils;
+import root.gast.speech.voiceaction.AbstractVoiceAction;
 import root.gast.speech.voiceaction.MultiCommandVoiceAction;
 import root.gast.speech.voiceaction.VoiceAction;
 import root.gast.speech.voiceaction.VoiceActionCommand;
@@ -87,15 +89,16 @@ public class SpeechRecognitionLauncher extends
 	private int failureRetry;
 	private int TIME_INTERVAL_REPEATABLE = 8; // ms
 	
+	private SoundPoolPlayerEx mSoundPlayer; 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fooddialogmulti);
  
 		log = (TextView) findViewById(R.id.tv_resultlog);
+		mSoundPlayer = new SoundPoolPlayerEx(this);
 		
-		
-//		initDbs();
 		initDialog();		
 		Log.i(TAG, "finish initialization");
 	}
@@ -105,7 +108,7 @@ public class SpeechRecognitionLauncher extends
 			executor = new VoiceActionExecutor(this);
 		}
 		lookupVoiceAction = makeLookup();
-
+		executor.setSoundPlayer(mSoundPlayer);
 	}
 
 	public void clearLog() {
@@ -154,6 +157,7 @@ public class SpeechRecognitionLauncher extends
 		voiceAction.setPrompt(LOOKUP_PROMPT);
 
 		voiceAction.setSpokenPrompt(LOOKUP_PROMPT);
+		voiceAction.setActionType(AbstractVoiceAction.FirstVoiceActionOutofTwo);
 
 		return voiceAction;
 	}
