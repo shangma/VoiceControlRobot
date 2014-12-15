@@ -20,8 +20,11 @@ public class Application extends android.app.Application {
 		// TODO Auto-generated method stub
 		super.onCreate();
 
-		Parse.initialize(this, "CZY3cCLhBhVMTU7bpaJssIhUs5KjYXllT3mXkga9",
-				"nZpYbqON9DpmtGZi2lNJltPbcmFr815ibfpkJ3yM");
+		/**
+		 * comment out Parse function, change to using bluetooth
+		 */
+//		Parse.initialize(this, "CZY3cCLhBhVMTU7bpaJssIhUs5KjYXllT3mXkga9",
+//				"nZpYbqON9DpmtGZi2lNJltPbcmFr815ibfpkJ3yM");
 
 		if (CommonUtil.ISCLIENT == 1) {
 			ParsePush.subscribeInBackground("ActivateRobot",
