@@ -3,6 +3,7 @@ package info.shangma.voicecontrolrobot.command;
 import info.shangma.utils.string.Inflector;
 import info.shangma.voicecontrolrobot.util.AppState;
 import info.shangma.voicecontrolrobot.util.CommonUtil;
+import info.shangma.voicecontrolrobot.Application;
 import info.shangma.voicecontrolrobot.R;
 import info.shangma.voicecontrolrobot.SpeechActivationBroadcastReceiver;
 import info.shangma.voicecontrolrobot.SpeechRecognitionLauncher;
@@ -115,11 +116,16 @@ public class ProductLookup implements VoiceActionCommand
 			
 			executor.speak(toSay, VoiceActionExecutor.END_OF_QUERY_SPEAK);
 			
-			ParsePush push = new ParsePush();
-			push.setChannel("ActivateRobot");
-			push.setMessage("Got the Notfication.");
-			push.setExpirationTimeInterval(2);
-			push.sendInBackground();;
+			// Parse push for notification
+//			ParsePush push = new ParsePush();
+//			push.setChannel("ActivateRobot");
+//			push.setMessage("Got the Notfication.");
+//			push.setExpirationTimeInterval(2);
+//			push.sendInBackground();
+			
+			// Bluetooth communication for notification
+			Log.d(TAG, "sending bluetooth notification");
+			((Application)this.context.getApplicationContext()).SendMessage(CommonUtil.MOVE_COMMAND);
 		}
     	
     	return lookupResult ;
