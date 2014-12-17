@@ -20,7 +20,7 @@ public class CommonUtil {
 
 	public static final int ISFORROBOT = 1;
 	public static final int ISFORCLIENT = 0;
-	public static int ISCLIENT = ISFORROBOT; // 0 for client, and 1 for robot
+	public static int ISCLIENT = ISFORCLIENT; // 0 for client, and 1 for robot
 	
 	
 	public final static String MOVE_COMMAND = "move";

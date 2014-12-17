@@ -7,6 +7,8 @@ import info.shangma.voicecontrolrobot.util.ServerThread;
 
 import java.io.IOException;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -158,11 +160,6 @@ public class MainActivity extends Activity implements OnInitListener, RoboMeList
 		
 		stopDetectionService();
 		
-		if (mTTS != null) {
-			mTTS.stop();
-			mTTS.shutdown();
-		}
-		
 		if (CommonUtil.ISCLIENT == CommonUtil.ISFORROBOT) {
 			roboMe.stopListening();
 			
@@ -201,6 +198,11 @@ public class MainActivity extends Activity implements OnInitListener, RoboMeList
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		Log.d(TAG, "onDestroy got called for MainActivity");
+		
+		if (mTTS != null) {
+			mTTS.stop();
+			mTTS.shutdown();
+		}
 
 		if (CommonUtil.ISCLIENT == CommonUtil.ISFORCLIENT) {
 			
@@ -263,15 +265,19 @@ public class MainActivity extends Activity implements OnInitListener, RoboMeList
 		
 		// check network availability
 		if (!isNetworkConnectionAvailable()) {
-			speakWords("Network is not available! Please check it");
+			speakWords("Network is not available!");
 			stopDetectionService();
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			MainActivity.this.finish();
+			
+			new Timer().schedule(new TimerTask() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					MainActivity.this.finish();
+				}
+			}, 3000);
+		} else {
+//			speakWords("I can help you locate things!");
 		}
 	}
 	
