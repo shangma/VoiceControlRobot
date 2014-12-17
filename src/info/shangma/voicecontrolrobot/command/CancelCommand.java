@@ -3,6 +3,7 @@ package info.shangma.voicecontrolrobot.command;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import info.shangma.voicecontrolrobot.AcknowledgementPresentActivity;
 import info.shangma.voicecontrolrobot.R;
 import info.shangma.voicecontrolrobot.SpeechRecognitionLauncher;
 import root.gast.speech.text.WordList;
@@ -10,6 +11,7 @@ import root.gast.speech.text.match.WordMatcher;
 import root.gast.speech.voiceaction.VoiceActionCommand;
 import root.gast.speech.voiceaction.VoiceActionExecutor;
 import android.content.Context;
+import android.content.Intent;
 
 /**
  * @author Greg Milette &#60;<a href="mailto:gregorym@gmail.com">gregorym@gmail.com</a>&#62;
@@ -46,6 +48,7 @@ public class CancelCommand implements VoiceActionCommand
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
+					CancelCommand.this.mContext.startActivity(new Intent(CancelCommand.this.mContext, AcknowledgementPresentActivity.class));
 					((SpeechRecognitionLauncher)CancelCommand.this.mContext).finish();
 				}
 			}, 2000);

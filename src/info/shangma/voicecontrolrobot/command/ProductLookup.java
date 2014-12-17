@@ -125,12 +125,7 @@ public class ProductLookup implements VoiceActionCommand
 //			executor.speak(toSay, VoiceActionExecutor.END_OF_QUERY_SPEAK);
 			prompt(toSay);
 			
-			// Parse push for notification
-//			ParsePush push = new ParsePush();
-//			push.setChannel("ActivateRobot");
-//			push.setMessage("Got the Notfication.");
-//			push.setExpirationTimeInterval(2);
-//			push.sendInBackground();
+			// Parse push for notification; removed
 			
 			// Bluetooth communication for notification
 			Log.d(TAG, "sending bluetooth notification");
@@ -154,7 +149,7 @@ public class ProductLookup implements VoiceActionCommand
 			String[] aisleNumbers = resultAisleNumber.split(",");
 			Log.d(TAG, "numbers of aisle found: " + aisleNumbers.length);
 
-			int waitingTime = 2000;
+			int waitingTime = 3000;
 			if (aisleNumbers.length > 3) {
 				waitingTime = 5000;
 			} else if (aisleNumbers.length > 1) {
