@@ -10,12 +10,5 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:src="@drawable/robotface" />
-    
-            <Button
-        android:id="@+id/testServiceBtn"
-        style="@style/ButtonOnMain"
-        android:background="@drawable/btn_black"
-        android:onClick="onTestService"
-        android:text="Test Service" />
 
 </LinearLayout>

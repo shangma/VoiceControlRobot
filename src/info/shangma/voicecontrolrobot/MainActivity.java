@@ -77,19 +77,21 @@ public class MainActivity extends Activity implements OnInitListener, RoboMeList
 			setContentView(R.layout.activity_main);
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 			
+			//Navigation Drawer
+			
+	        mPlanetTitles = getResources().getStringArray(R.array.planets_array);
+	        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+	        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+	        // set a custom shadow that overlays the main content when the drawer opens
+	        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+	        // set up the drawer's list view with items and click listener
+	        mDrawerList.setAdapter(new ArrayAdapter<String>(this,R.layout.drawer_list_item, mPlanetTitles));
+	        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+			
 		}
 
-		//Navigation Drawer
-		
-        mPlanetTitles = getResources().getStringArray(R.array.planets_array);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        // set a custom shadow that overlays the main content when the drawer opens
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,R.layout.drawer_list_item, mPlanetTitles));
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         
 
 		
@@ -368,7 +370,7 @@ public class MainActivity extends Activity implements OnInitListener, RoboMeList
 		}
     }
     
-	private void onClickStart(View view) {        
+	public void onClickStart(View view) {        
 		Intent i = new Intent(this, SpeechRecognitionLauncher.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         this.startActivity(i);
