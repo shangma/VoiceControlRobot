@@ -13,6 +13,8 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
@@ -46,6 +48,7 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.alchemyapi.api.AlchemyAPI;
@@ -85,6 +88,11 @@ public class SpeechRecognitionLauncher extends
 		mSoundPlayer = new SoundPoolPlayerEx(this);
 		
 		initDialog();		
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+				| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+				| WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+				| WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+		
 		Log.i(TAG, "finish initialization");
 	}
 
@@ -125,9 +133,6 @@ public class SpeechRecognitionLauncher extends
 
 	private VoiceAction makeLookup() {
 		
-		final String LOOKUP_PROMPT = getResources().getString(
-				R.string.speech_launcher_prompt);
-
 		// match it with two levels of strictness
 		boolean relaxed = false;
 
@@ -139,17 +144,19 @@ public class SpeechRecognitionLauncher extends
 		// don't retry
 		voiceAction.setNotUnderstood(new WhyNotUnderstoodListener(this,
 				executor, false));
+		
+		String LOOKUP_PROMPT = getResources().getString(R.string.speech_launcher_prompt);
 		voiceAction.setPrompt(LOOKUP_PROMPT);
-
 		voiceAction.setSpokenPrompt(LOOKUP_PROMPT);
+		
 		voiceAction.setActionType(AbstractVoiceAction.FirstVoiceActionOutofTwo);
 
 		return voiceAction;
 	}
 
-	private void prompt() {
-		Log.d(TAG, "Speak prompt");
-		getTts().speak(getString(R.string.speech_launcher_prompt),
+	private void prompt(String promptText) {
+		Log.d(TAG, promptText);
+		getTts().speak(promptText,
 				TextToSpeech.QUEUE_FLUSH,
 				TextToSpeechUtils.makeParamsWith(ON_DONE_PROMPT_TTS_PARAM));
 	}
@@ -176,40 +183,65 @@ public class SpeechRecognitionLauncher extends
 
 	}
 
-	/*
+	
 	@Override
 	protected void recognitionFailure(int errorCode) {
 		// TODO Auto-generated method stub
 		super.recognitionFailure(errorCode);
 		
-		//handle unclear recognition
-		currentFailureTimeStamp = SystemClock.currentThreadTimeMillis();
-		if (prevFailureTimeStamp == -1) {
-			prevFailureTimeStamp = currentFailureTimeStamp;
-		}
-
-		long timeDifference = currentFailureTimeStamp - prevFailureTimeStamp;
-
-		if ((timeDifference < TIME_INTERVAL_REPEATABLE) && (failureRetry > 0)) {
-
-			// repeat current recognition
-			repeatCurrentRecognition();
-		} else if ((timeDifference <= TIME_INTERVAL_REPEATABLE)
-				&& (failureRetry <= 0)) {
-			// run out of retry, go back to the beginning
-
-			failureRetry = 3;
-			AppState.getAppStateInstance().setCurrentState(AppState.EndOfQuery);
+		switch (errorCode) {
+		case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+			startActivity(new Intent(this, AcknowledgementPresentActivity.class));
 			this.finish();
-		} else {
-			// repeat current recognition
-			failureRetry = 3;
-			prevFailureTimeStamp = currentFailureTimeStamp;
-			repeatCurrentRecognition();
+			break;
+		
+		case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
+		case SpeechRecognizer.ERROR_NETWORK:
+			prompt("Network is not right.");
+			
+			Timer timer_1 = new Timer();			
+			timer_1.schedule(new TimerTask() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					SpeechRecognitionLauncher.this.finish();
+				}
+			}, 4000);
+			break;
+		case SpeechRecognizer.ERROR_NO_MATCH:
+			prompt("Sorry. I do not understand what you said. Would you like to try again?");
+			
+			Timer timer_2 = new Timer();			
+			timer_2.schedule(new TimerTask() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					SpeechRecognitionLauncher.this.finish();
+				}
+			}, 4000);
+			break;
+			
+		case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
+		case SpeechRecognizer.ERROR_SERVER:
+			prompt("Sorry! Could you try this service later?");
+			
+			Timer timer_3 = new Timer();
+			timer_3.schedule(new TimerTask() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					SpeechRecognitionLauncher.this.finish();
+				}
+			}, 4000);
+			break;
+		default:
+			break;
 		}
-
 	}
-	*/
+	
 	private void repeatCurrentRecognition() {
 		
 		failureRetry--;

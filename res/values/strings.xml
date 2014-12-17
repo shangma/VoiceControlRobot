@@ -11,11 +11,8 @@
     <string name="food_remove_complete">removed %1$s</string>
     <string name="food_remove_confirm_prompt">Are you sure you want to remove %1$s?</string>
 
-    <array name="food_cancel">
+    <array name="lookup_cancel">
         <item>cancel</item>
-    </array>
-    <array name="device_confirm">
-        <item>yes</item>
         <item>no</item>
     </array>
     <array name="second_offer_yes">

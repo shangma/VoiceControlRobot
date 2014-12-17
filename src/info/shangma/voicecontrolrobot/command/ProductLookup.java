@@ -13,7 +13,10 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.LogRecord;
 import java.util.zip.GZIPInputStream;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,7 +42,10 @@ import com.alchemyapi.api.AlchemyAPI;
 import com.parse.ParsePush;
 
 import root.gast.speech.text.WordList;
+import root.gast.speech.tts.TextToSpeechUtils;
+import root.gast.speech.voiceaction.AbstractVoiceAction;
 import root.gast.speech.voiceaction.MultiCommandVoiceAction;
+import root.gast.speech.voiceaction.VoiceAction;
 import root.gast.speech.voiceaction.VoiceActionCommand;
 import root.gast.speech.voiceaction.VoiceActionExecutor;
 import root.gast.speech.voiceaction.WhyNotUnderstoodListener;
@@ -47,12 +53,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
 public class ProductLookup implements VoiceActionCommand
 {
     private static final String TAG = "Product Lookup";
-
+    private static final String ON_DONE_PROMPT_TTS_PARAM = "ON_DONE_PROMPT";
+    
     private VoiceActionExecutor executor;
     private Context context;
     
@@ -114,7 +122,8 @@ public class ProductLookup implements VoiceActionCommand
 			String result = context.getString(R.string.product_lookup_result);
 			String toSay = String.format(result, currentProduct, resultAisleNumber);
 			
-			executor.speak(toSay, VoiceActionExecutor.END_OF_QUERY_SPEAK);
+//			executor.speak(toSay, VoiceActionExecutor.END_OF_QUERY_SPEAK);
+			prompt(toSay);
 			
 			// Parse push for notification
 //			ParsePush push = new ParsePush();
@@ -126,10 +135,53 @@ public class ProductLookup implements VoiceActionCommand
 			// Bluetooth communication for notification
 			Log.d(TAG, "sending bluetooth notification");
 			((Application)this.context.getApplicationContext()).SendMessage(CommonUtil.MOVE_COMMAND);
+			
+			VoiceActionCommand cancelCommand = new CancelCommand(this.context, this.executor);
+			VoiceActionCommand lookupCommand = new ProductLookup(this.context, this.executor);
+
+			final VoiceAction voiceAction = new MultiCommandVoiceAction(Arrays.asList(
+					cancelCommand, lookupCommand));
+			// don't retry
+			voiceAction.setNotUnderstood(new WhyNotUnderstoodListener(this.context,
+					this.executor, false));
+			
+			String LOOKUP_PROMPT = this.context.getResources().getString(R.string.speech_launcher_prompt);
+			voiceAction.setPrompt(LOOKUP_PROMPT);
+			voiceAction.setSpokenPrompt(LOOKUP_PROMPT);
+			
+			voiceAction.setActionType(AbstractVoiceAction.FirstVoiceActionOutofTwo);
+			
+			String[] aisleNumbers = resultAisleNumber.split(",");
+			Log.d(TAG, "numbers of aisle found: " + aisleNumbers.length);
+
+			int waitingTime = 2000;
+			if (aisleNumbers.length > 3) {
+				waitingTime = 5000;
+			} else if (aisleNumbers.length > 1) {
+				waitingTime = 4000;
+			}
+			
+			Timer timer_2 = new Timer();			
+			timer_2.schedule(new TimerTask() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					ProductLookup.this.executor.execute(voiceAction);
+				}
+			}, waitingTime);
+			
 		}
     	
     	return lookupResult ;
     }
+    
+	private void prompt(String promptText) {
+		Log.d(TAG, promptText);
+		((SpeechRecognitionLauncher)this.context).getTts().speak(promptText,
+				TextToSpeech.QUEUE_FLUSH,
+				TextToSpeechUtils.makeParamsWith(ON_DONE_PROMPT_TTS_PARAM));
+	}
     
 	private static String convertStreamToString(InputStream is) {
 		try {
@@ -289,12 +341,13 @@ public class ProductLookup implements VoiceActionCommand
 			return null;
 		}
 
+		/*
 		@Override
 		protected void onPostExecute(Void result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			
-			/*
+			
 			VoiceActionCommand secondOfferYes = new SecondOfferYes(context, executor);
 			VoiceActionCommand secondOfferNo = new SecondOfferNo(context, executor);
 			String secondOfferPrompt;
@@ -336,11 +389,11 @@ public class ProductLookup implements VoiceActionCommand
 				toSay = secondOfferPrompt;
 			}
 			
-			*/
+			
 
 		}
 		
-		
+		*/
 	}
     
 }
