@@ -54,4 +54,10 @@
         <item>delete</item>
     </array>
 
+    <string-array name="planets_array">
+        <item>Test Network</item>
+        <item>Test Bluetooth</item>
+        <item>Testing Service</item>
+    </string-array>
+    
 </resources>

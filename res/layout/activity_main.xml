@@ -1,47 +1,41 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#003300"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.33"
-        android:gravity="center"
-        android:text="I can help you to locate things!"
-        android:textColor="@color/background_white"
-        android:textSize="80sp" />
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#003300"
+        android:orientation="vertical" >
 
-    <ImageButton
-        android:id="@+id/startBtn"
-        style="@style/ImageButtonOnMain"
-        android:layout_weight="1"      
-        android:onClick="onClickStart"
-        android:src="@drawable/start" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:gravity="center"
+            android:text="I can help you to locate things!"
+            android:textColor="@color/background_white"
+            android:textSize="80sp" />
 
-    <!--
-    <Button
-        android:id="@+id/startServiceBtn"
-        style="@style/ButtonOnMain"
-        android:background="@drawable/btn_green"
-        android:onClick="onStartService"
-        android:text="Force to Start" />
+        <ImageButton
+            android:id="@+id/startBtn"
+            style="@style/ImageButtonOnMain"
+            android:layout_weight="1"
+            android:onClick="onClickStart"
+            android:src="@drawable/start" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/stopServiceBtn"
-        style="@style/ButtonOnMain"
-        android:background="@drawable/btn_red"
-        android:onClick="onStopService"
-        android:text="Force to Stop" />
-    -->
+    <ListView
+        android:id="@+id/left_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#111"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp" />
 
-    <Button
-        android:id="@+id/testServiceBtn"
-        style="@style/ButtonOnMain"
-        android:background="@drawable/btn_black"
-        android:onClick="onTestService"
-        android:text="Test Service" />
-
-
-</LinearLayout>
+</android.support.v4.widget.DrawerLayout>
