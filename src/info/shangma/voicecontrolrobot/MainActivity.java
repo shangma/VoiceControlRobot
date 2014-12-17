@@ -87,6 +87,42 @@ public class MainActivity extends Activity implements OnInitListener, RoboMeList
 //		StrictMode.setThreadPolicy(policy);
 	
 		mTTS = new TextToSpeech(this, this);
+		
+		if (CommonUtil.ISCLIENT == CommonUtil.ISFORCLIENT) {
+			//---if you are already talking to someone...---
+	        if (((Application)this.getApplicationContext()).connectToServerThread!=null) {
+	            try {
+	                //---close the connection first---
+	            	((Application)this.getApplicationContext()).connectToServerThread.bluetoothSocket.close();
+	            } catch (IOException e) {
+	            	Log.d("MainActivity", e.getLocalizedMessage());            	
+	            }
+	        }
+	        
+	        //---connect to the selected Bluetooth device---
+	        Set<BluetoothDevice> pairedDevices = ((Application)this.getApplicationContext()).bluetoothAdapter.getBondedDevices();
+	        Log.d(TAG, "the size of paired: " + pairedDevices.size());
+	        if (pairedDevices.size() > 0) {
+				for (BluetoothDevice device : pairedDevices) {
+					Log.d(TAG, "name: " + device.getName() + " | Address: " + device.getAddress()); 
+					if (device.getAddress().equals(NEXUS_FIVE)) {
+						
+						((Application)this.getApplicationContext()).connectToServerThread = new 
+					            ConnectToServerThread(device, ((Application)this.getApplicationContext()).bluetoothAdapter);
+						((Application)this.getApplicationContext()).connectToServerThread.start();
+						
+						Toast.makeText(this, "Require connection", Toast.LENGTH_LONG);
+						Log.d(TAG, "Connected to: " + device.getName());
+					}
+				}
+			}
+		} else if (CommonUtil.ISCLIENT == CommonUtil.ISFORROBOT) {
+			
+	        //---start the socket server---
+			((Application) this.getApplicationContext()).serverThread = new ServerThread(((Application) this.getApplicationContext()).bluetoothAdapter);
+			((Application) this.getApplicationContext()).serverThread.start();
+		}
+
 	}
 
 	@Override
@@ -119,10 +155,6 @@ public class MainActivity extends Activity implements OnInitListener, RoboMeList
 		if (CommonUtil.ISCLIENT == CommonUtil.ISFORROBOT) {
 			roboMe.setVolume(12);
 			roboMe.startListening();
-			
-	        //---start the socket server---
-			((Application) this.getApplicationContext()).serverThread = new ServerThread(((Application) this.getApplicationContext()).bluetoothAdapter);
-			((Application) this.getApplicationContext()).serverThread.start();
 
 		} else if (CommonUtil.ISCLIENT == CommonUtil.ISFORCLIENT) {
 			// startDetectionService();
@@ -180,33 +212,7 @@ public class MainActivity extends Activity implements OnInitListener, RoboMeList
 
 	public void onClickStart(View view) {
 		
-		//---if you are already talking to someone...---
-        if (((Application)this.getApplicationContext()).connectToServerThread!=null) {
-            try {
-                //---close the connection first---
-            	((Application)this.getApplicationContext()).connectToServerThread.bluetoothSocket.close();
-            } catch (IOException e) {
-            	Log.d("MainActivity", e.getLocalizedMessage());            	
-            }
-        }
-        
-        //---connect to the selected Bluetooth device---
-        Set<BluetoothDevice> pairedDevices = ((Application)this.getApplicationContext()).bluetoothAdapter.getBondedDevices();
-        Log.d(TAG, "the size of paired: " + pairedDevices.size());
-        if (pairedDevices.size() > 0) {
-			for (BluetoothDevice device : pairedDevices) {
-				Log.d(TAG, "name: " + device.getName() + " | Address: " + device.getAddress()); 
-				if (device.getAddress().equals(NEXUS_FIVE)) {
-					
-					((Application)this.getApplicationContext()).connectToServerThread = new 
-				            ConnectToServerThread(device, ((Application)this.getApplicationContext()).bluetoothAdapter);
-					((Application)this.getApplicationContext()).connectToServerThread.start();
-					
-					Toast.makeText(this, "Require connection", Toast.LENGTH_LONG);
-					Log.d(TAG, "Connected to: " + device.getName());
-				}
-			}
-		}
+
         
 		Intent i = new Intent(this, SpeechRecognitionLauncher.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

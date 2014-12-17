@@ -34,6 +34,7 @@
         android:background="@drawable/btn_red"
         android:onClick="onStopService"
         android:text="Force to Stop" />
+    -->
 
     <Button
         android:id="@+id/testServiceBtn"
@@ -41,6 +42,6 @@
         android:background="@drawable/btn_black"
         android:onClick="onTestService"
         android:text="Test Service" />
-    -->
+
 
 </LinearLayout>
