@@ -62,29 +62,6 @@ public class Application extends android.app.Application {
 		 * comment out Parse function, change to using bluetooth
 		 */
 		
-		/*
-		Parse.initialize(this, "CZY3cCLhBhVMTU7bpaJssIhUs5KjYXllT3mXkga9",
-				"nZpYbqON9DpmtGZi2lNJltPbcmFr815ibfpkJ3yM");
-
-		if (CommonUtil.ISCLIENT == 1) {
-			ParsePush.subscribeInBackground("ActivateRobot",
-					new SaveCallback() {
-
-						@Override
-						public void done(ParseException e) {
-							// TODO Auto-generated method stub
-							if (e == null) {
-								Log.d("com.parse.push",
-										"successfully subscribed to the broadcast channel.");
-							} else {
-								Log.e("com.parse.push",
-										"failed to subscribe for push", e);
-							}
-						}
-					});
-		}
-		*/
-		
 		// bluetooth
 		discoveredDevices = new ArrayList<BluetoothDevice>();
         discoveredDevicesNames = new ArrayList<String>();

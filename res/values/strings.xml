@@ -57,7 +57,8 @@
     <string-array name="planets_array">
         <item>Test Network</item>
         <item>Test Bluetooth</item>
-        <item>Testing Service</item>
+        <item>Test Service</item>
+        <item>Test Hello</item>
     </string-array>
     
 </resources>

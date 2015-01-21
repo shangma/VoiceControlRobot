@@ -48,6 +48,7 @@ public class MainActivity extends Activity implements OnInitListener, RoboMeList
 	private static final String TABLET_BT_ADDRESS = "10:30:47:DB:3B:04";
 	private static final String ONE_X_BT_ADDRESS = "A0:F4:50:6E:B5:63";
 	private static final String NEXUS_FIVE = "50:55:27:60:5F:02";
+	private static final String NEXUS_FIVE_2ND = "BC:F5:AC:9B:99:B7";
 	
 	// navigation drawer
     private String[] mPlanetTitles;
@@ -138,7 +139,7 @@ public class MainActivity extends Activity implements OnInitListener, RoboMeList
         if (pairedDevices.size() > 0) {
 			for (BluetoothDevice device : pairedDevices) {
 				Log.d(TAG, "name: " + device.getName() + " | Address: " + device.getAddress()); 
-				if (device.getAddress().equals(NEXUS_FIVE)) {
+				if (device.getAddress().equals(NEXUS_FIVE) || device.getAddress().equals(NEXUS_FIVE_2ND)) {
 					
 					((Application)this.getApplicationContext()).connectToServerThread = new 
 				            ConnectToServerThread(device, ((Application)this.getApplicationContext()).bluetoothAdapter);
@@ -370,6 +371,9 @@ public class MainActivity extends Activity implements OnInitListener, RoboMeList
 			break;
 		case 2:
 			testService();
+			break;
+		case 3:
+			forceStartService();
 			break;
 		default:
 			break;

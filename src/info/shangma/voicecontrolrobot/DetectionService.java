@@ -5,6 +5,7 @@ import java.util.List;
 import root.gast.speech.SpeechRecognitionUtil;
 import root.gast.speech.text.WordList;
 import root.gast.speech.text.match.SoundsLikeWordMatcher;
+import root.gast.speech.text.match.WordMatcher;
 
 import android.app.Service;
 import android.content.Context;
@@ -172,7 +173,7 @@ public class DetectionService extends Service implements RecognitionListener {
 	@Override
 	public void onRmsChanged(float rmsdB) {
 		// TODO Auto-generated method stub
-
+		Log.d(TAG, "Rms Changed");
 	}
 
 	private void receiveResults(Bundle results) {
@@ -190,6 +191,11 @@ public class DetectionService extends Service implements RecognitionListener {
 	}
 
 	private void receiveWhatWasHeard(List<String> heard, float[] scores) {
+		
+		for (int i = 0; i < heard.size(); i++) {
+			Log.d(TAG, heard.get(i) + " " );
+		}
+		
 		boolean heardTargetWord = false;
 		// find the target word
 		for (String possible : heard) {
@@ -230,13 +236,15 @@ public class DetectionService extends Service implements RecognitionListener {
 		
 		
 		// start the launch directly
-        Intent i = new Intent(this, SpeechRecognitionLauncher.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.startActivity(i);
+//        Intent i = new Intent(this, SpeechRecognitionLauncher.class);
+//        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        this.startActivity(i);
 
 		Log.i(TAG, "found it");
 		// always stop after receive an activation
 		stopSelf();
+//		startDetection();
+		
 
 	}
 }
