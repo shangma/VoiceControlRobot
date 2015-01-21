@@ -1,5 +1,11 @@
 package info.shangma.voicecontrolrobot.util;
 
+/**
+ * @author Shang Ma
+ *
+ * www.shangma.info
+ */
+
 public class AppState {
 	
 	public static final int Uninitialized = -1;

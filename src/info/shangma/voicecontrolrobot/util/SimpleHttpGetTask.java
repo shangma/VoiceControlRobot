@@ -14,6 +14,12 @@ import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
 
+/**
+ * @author Shang Ma
+ *
+ * www.shangma.info
+ */
+
 public class SimpleHttpGetTask extends AsyncTask<String, Void, String> {
 	
 	private final static String TAG = "SimpleHttpGetTask";

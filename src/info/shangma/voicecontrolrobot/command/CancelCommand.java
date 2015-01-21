@@ -3,20 +3,23 @@ package info.shangma.voicecontrolrobot.command;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import info.shangma.speech.text.WordList;
+import info.shangma.speech.text.match.WordMatcher;
+import info.shangma.speech.voiceaction.VoiceActionCommand;
+import info.shangma.speech.voiceaction.VoiceActionExecutor;
 import info.shangma.voicecontrolrobot.AcknowledgementPresentActivity;
 import info.shangma.voicecontrolrobot.R;
 import info.shangma.voicecontrolrobot.SpeechRecognitionLauncher;
-import root.gast.speech.text.WordList;
-import root.gast.speech.text.match.WordMatcher;
-import root.gast.speech.voiceaction.VoiceActionCommand;
-import root.gast.speech.voiceaction.VoiceActionExecutor;
+
 import android.content.Context;
 import android.content.Intent;
 
 /**
- * @author Greg Milette &#60;<a href="mailto:gregorym@gmail.com">gregorym@gmail.com</a>&#62;
+ * @author Shang Ma
  *
+ * www.shangma.info
  */
+
 public class CancelCommand implements VoiceActionCommand
 {
     private VoiceActionExecutor executor;

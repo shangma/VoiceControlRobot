@@ -3,13 +3,17 @@ package info.shangma.voicecontrolrobot;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import root.gast.speech.tts.TextToSpeechUtils;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.util.Log;
+
+/**
+ * @author Shang Ma
+ *
+ * www.shangma.info
+ */
 
 public class AcknowledgementPresentActivity extends Activity implements OnInitListener {
 	private final static String TAG = "AcknowledgementPresentActivity";

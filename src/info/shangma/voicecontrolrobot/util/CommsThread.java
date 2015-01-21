@@ -13,6 +13,12 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * @author Shang Ma
+ *
+ * www.shangma.info
+ */
+
 public class CommsThread extends Thread {
 	
 	private final static String TAG = "CommsThread";

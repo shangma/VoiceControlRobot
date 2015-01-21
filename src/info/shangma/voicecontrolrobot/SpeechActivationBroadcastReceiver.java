@@ -5,6 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+/**
+ * @author Shang Ma
+ *
+ * www.shangma.info
+ */
+
 public class SpeechActivationBroadcastReceiver extends BroadcastReceiver {
 	
 	private static final String TAG = "SpeechActivationBroadcastReceiver";

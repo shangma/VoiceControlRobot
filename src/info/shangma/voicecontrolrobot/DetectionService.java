@@ -1,11 +1,10 @@
 package info.shangma.voicecontrolrobot;
 
-import java.util.List;
+import info.shangma.speech.SpeechRecognitionUtil;
+import info.shangma.speech.text.WordList;
+import info.shangma.speech.text.match.SoundsLikeWordMatcher;
 
-import root.gast.speech.SpeechRecognitionUtil;
-import root.gast.speech.text.WordList;
-import root.gast.speech.text.match.SoundsLikeWordMatcher;
-import root.gast.speech.text.match.WordMatcher;
+import java.util.List;
 
 import android.app.Service;
 import android.content.Context;
@@ -16,6 +15,12 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
+
+/**
+ * @author Shang Ma
+ *
+ * www.shangma.info
+ */
 
 public class DetectionService extends Service implements RecognitionListener {
 

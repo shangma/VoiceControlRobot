@@ -10,6 +10,12 @@ import android.util.Log;
 import com.parse.ParsePushBroadcastReceiver;
 import com.wowwee.robome.RoboMeCommands.RobotCommand;
 
+/**
+ * @author Shang Ma
+ *
+ * www.shangma.info
+ */
+
 public class PushReceiver extends ParsePushBroadcastReceiver{
 	
 	private static final String TAG = "Push Receiver";

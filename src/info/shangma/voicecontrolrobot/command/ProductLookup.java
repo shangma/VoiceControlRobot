@@ -1,5 +1,13 @@
 package info.shangma.voicecontrolrobot.command;
 
+import info.shangma.speech.text.WordList;
+import info.shangma.speech.tts.TextToSpeechUtils;
+import info.shangma.speech.voiceaction.AbstractVoiceAction;
+import info.shangma.speech.voiceaction.MultiCommandVoiceAction;
+import info.shangma.speech.voiceaction.VoiceAction;
+import info.shangma.speech.voiceaction.VoiceActionCommand;
+import info.shangma.speech.voiceaction.VoiceActionExecutor;
+import info.shangma.speech.voiceaction.WhyNotUnderstoodListener;
 import info.shangma.utils.string.Inflector;
 import info.shangma.voicecontrolrobot.util.AppState;
 import info.shangma.voicecontrolrobot.util.CommonUtil;
@@ -41,20 +49,18 @@ import org.xml.sax.SAXException;
 import com.alchemyapi.api.AlchemyAPI;
 import com.parse.ParsePush;
 
-import root.gast.speech.text.WordList;
-import root.gast.speech.tts.TextToSpeechUtils;
-import root.gast.speech.voiceaction.AbstractVoiceAction;
-import root.gast.speech.voiceaction.MultiCommandVoiceAction;
-import root.gast.speech.voiceaction.VoiceAction;
-import root.gast.speech.voiceaction.VoiceActionCommand;
-import root.gast.speech.voiceaction.VoiceActionExecutor;
-import root.gast.speech.voiceaction.WhyNotUnderstoodListener;
 import android.content.Context;
 import android.content.Intent;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+
+/**
+ * @author Shang Ma
+ *
+ * www.shangma.info
+ */
 
 public class ProductLookup implements VoiceActionCommand
 {

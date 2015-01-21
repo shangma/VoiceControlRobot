@@ -1,5 +1,13 @@
 package info.shangma.voicecontrolrobot;
 
+import info.shangma.speech.SpeechRecognizingAndSpeakingActivity;
+import info.shangma.speech.tts.TextToSpeechUtils;
+import info.shangma.speech.voiceaction.AbstractVoiceAction;
+import info.shangma.speech.voiceaction.MultiCommandVoiceAction;
+import info.shangma.speech.voiceaction.VoiceAction;
+import info.shangma.speech.voiceaction.VoiceActionCommand;
+import info.shangma.speech.voiceaction.VoiceActionExecutor;
+import info.shangma.speech.voiceaction.WhyNotUnderstoodListener;
 import info.shangma.voicecontrolrobot.command.CancelCommand;
 import info.shangma.voicecontrolrobot.command.ProductLookup;
 import info.shangma.voicecontrolrobot.command.SecondOfferNo;
@@ -30,14 +38,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import root.gast.speech.SpeechRecognizingAndSpeakingActivity;
-import root.gast.speech.tts.TextToSpeechUtils;
-import root.gast.speech.voiceaction.AbstractVoiceAction;
-import root.gast.speech.voiceaction.MultiCommandVoiceAction;
-import root.gast.speech.voiceaction.VoiceAction;
-import root.gast.speech.voiceaction.VoiceActionCommand;
-import root.gast.speech.voiceaction.VoiceActionExecutor;
-import root.gast.speech.voiceaction.WhyNotUnderstoodListener;
 import android.R.integer;
 import android.app.Activity;
 import android.content.Intent;
@@ -53,16 +53,13 @@ import android.widget.TextView;
 
 import com.alchemyapi.api.AlchemyAPI;
 
-
 /**
- * Starts a speech recognition dialog and then sends the results to
- * {@link SpeechRecognitionResultsActivity}
- * 
- * @author Greg Milette &#60;<a
- *         href="mailto:gregorym@gmail.com">gregorym@gmail.com</a>&#62;
+ * @author Shang Ma
+ *
+ * www.shangma.info
  */
-public class SpeechRecognitionLauncher extends
-		SpeechRecognizingAndSpeakingActivity {
+
+public class SpeechRecognitionLauncher extends SpeechRecognizingAndSpeakingActivity {
 	private static final String TAG = "SpeechRecognitionLauncher";
 
 	private static final String ON_DONE_PROMPT_TTS_PARAM = "ON_DONE_PROMPT";

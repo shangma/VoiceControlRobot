@@ -38,6 +38,12 @@ import com.wowwee.robome.RoboMe.RoboMeListener;
 import com.wowwee.robome.RoboMeCommands.IncomingRobotCommand;
 import com.wowwee.robome.SensorStatus;
 
+/**
+ * @author Shang Ma
+ *
+ * www.shangma.info
+ */
+
 public class MainActivity extends Activity implements OnInitListener, RoboMeListener {
 	
 	private static final String TAG= "Main Activity";

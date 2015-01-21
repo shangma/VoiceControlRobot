@@ -11,6 +11,12 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
+/**
+ * @author Shang Ma
+ *
+ * www.shangma.info
+ */
+
 public class ServerThread extends Thread {    
     //---the server socket---
     private final BluetoothServerSocket bluetoothServerSocket; 

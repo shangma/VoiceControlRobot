@@ -2,15 +2,21 @@ package info.shangma.voicecontrolrobot.command;
 
 import java.util.Arrays;
 
+import info.shangma.speech.text.WordList;
+import info.shangma.speech.text.match.WordMatcher;
+import info.shangma.speech.voiceaction.MultiCommandVoiceAction;
+import info.shangma.speech.voiceaction.VoiceActionCommand;
+import info.shangma.speech.voiceaction.VoiceActionExecutor;
+import info.shangma.speech.voiceaction.WhyNotUnderstoodListener;
 import info.shangma.voicecontrolrobot.R;
 import info.shangma.voicecontrolrobot.util.AppState;
 import android.content.Context;
-import root.gast.speech.text.WordList;
-import root.gast.speech.text.match.WordMatcher;
-import root.gast.speech.voiceaction.MultiCommandVoiceAction;
-import root.gast.speech.voiceaction.VoiceActionCommand;
-import root.gast.speech.voiceaction.VoiceActionExecutor;
-import root.gast.speech.voiceaction.WhyNotUnderstoodListener;
+
+/**
+ * @author Shang Ma
+ *
+ * www.shangma.info
+ */
 
 public class SecondOfferYes implements VoiceActionCommand{
 	

@@ -11,6 +11,12 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
+/**
+ * @author Shang Ma
+ *
+ * www.shangma.info
+ */
+
 public class ConnectToServerThread extends Thread {
     ///=========
 	public CommsThread commsThread;

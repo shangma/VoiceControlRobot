@@ -25,6 +25,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+/**
+ * @author Shang Ma
+ *
+ * www.shangma.info
+ */
+
 public class Application extends android.app.Application {
 	
 	private static final String TAG = "Application";
